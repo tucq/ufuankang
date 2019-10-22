@@ -11,17 +11,29 @@ const userInfo = {
 }
 /* 首页轮播图 */
 const carouselList = [{
-		src: "/static/temp/banner3.jpg",
+	// 	src: "/static/temp/banner3.jpg",
+	// 	background: "rgb(203, 87, 60)",
+	// },
+	// {
+	// 	src: "/static/temp/banner2.jpg",
+	// 	background: "rgb(205, 215, 218)",
+	// },
+	// {
+	// 	src: "/static/temp/banner4.jpg",
+	// 	background: "rgb(183, 73, 69)",
+	// }
+	src: "/static/ufak/gmsj.jpg",
 		background: "rgb(203, 87, 60)",
 	},
 	{
-		src: "/static/temp/banner2.jpg",
+		src: "/static/ufak/sks.jpg",
 		background: "rgb(205, 215, 218)",
 	},
 	{
-		src: "/static/temp/banner4.jpg",
+		src: "/static/ufak/lksb.jpg",
 		background: "rgb(183, 73, 69)",
 	}
+	
 ]
 /* 商品列表 */
 const goodsList = [{

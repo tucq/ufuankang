@@ -3,7 +3,7 @@
 		<!-- 小程序头部兼容 -->
 		<!-- #ifdef MP -->
 		<view class="mp-search-box">
-			<input class="ser-input" type="text" value="输入关键字搜索" disabled />
+			<input class="ser-input" type="text" value="输入关键字搜索"  />
 		</view>
 		<!-- #endif -->
 		
@@ -29,32 +29,32 @@
 		<view class="cate-section">
 			<view class="cate-item">
 				<image src="/static/temp/c3.png"></image>
-				<text>环球美食</text>
+				<text>分类1</text>
 			</view>
 			<view class="cate-item">
 				<image src="/static/temp/c5.png"></image>
-				<text>个护美妆</text>
+				<text>分类2</text>
 			</view>
 			<view class="cate-item">
 				<image src="/static/temp/c6.png"></image>
-				<text>营养保健</text>
+				<text>分类3</text>
 			</view>
 			<view class="cate-item">
 				<image src="/static/temp/c7.png"></image>
-				<text>家居厨卫</text>
+				<text>分类4</text>
 			</view>
 			<view class="cate-item">
 				<image src="/static/temp/c8.png"></image>
-				<text>速食生鲜</text>
+				<text>分类5</text>
 			</view>
 		</view>
-		
+		<!-- 
 		<view class="ad-1">
 			<image src="/static/temp/ad1.jpg" mode="scaleToFill"></image>
-		</view>
+		</view> -->
 		
 		<!-- 秒杀楼层 -->
-		<view class="seckill-section m-t">
+		<!-- <view class="seckill-section m-t">
 			<view class="s-header">
 				<image class="s-img" src="/static/temp/secskill-img.jpg" mode="widthFix"></image>
 				<text class="tip">8点场</text>
@@ -76,10 +76,10 @@
 					</view>
 				</view>
 			</scroll-view>
-		</view>
+		</view> -->
 		
 		<!-- 团购楼层 -->
-		<view class="f-header m-t">
+		<!-- <view class="f-header m-t">
 			<image src="/static/temp/h1.png"></image>
 			<view class="tit-box">
 				<text class="tit">精品团购</text>
@@ -132,7 +132,7 @@
 				</swiper-item>
 
 			</swiper>
-		</view>
+		</view> -->
 		
 		
 		
@@ -212,11 +212,11 @@
 			</scroll-view>
 		</view>
 
-		<!-- 猜你喜欢 -->
+		<!-- 猜你所需 -->
 		<view class="f-header m-t">
 			<image src="/static/temp/h1.png"></image>
 			<view class="tit-box">
-				<text class="tit">猜你喜欢</text>
+				<text class="tit">猜你所需</text>
 				<text class="tit2">Guess You Like It</text>
 			</view>
 			<text class="yticon icon-you"></text>
@@ -281,6 +281,7 @@
 			navToDetailPage(item) {
 				//测试数据没有写id，用title代替
 				let id = item.title;
+				console.log("详情页id",id);
 				uni.navigateTo({
 					url: `/pages/product/product?id=${id}`
 				})
