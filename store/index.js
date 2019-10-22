@@ -21,6 +21,7 @@ const store = new Vuex.Store({
 		},
 		logout(state) {
 			state.hasLogin = false;
+			//测试git
 			state.userInfo = {};
 			uni.removeStorage({  
                 key: 'userInfo'  
