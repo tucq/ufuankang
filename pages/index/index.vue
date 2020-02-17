@@ -26,8 +26,12 @@
 			</view>
 		</view>
 		<!-- 分类 -->
-		<view class="cate-section">
-			<view class="cate-item">
+		<view class="cate-section" >
+			<view class="cate-item" v-for="(item, index) in typeList" :key="index">
+				<image :src="item.src"></image>
+				<text>{{item.title}}</text>
+			</view>
+			<!-- <view class="cate-item">
 				<image src="/static/temp/c3.png"></image>
 				<text>分类1</text>
 			</view>
@@ -46,15 +50,16 @@
 			<view class="cate-item">
 				<image src="/static/temp/c8.png"></image>
 				<text>分类5</text>
-			</view>
+			</view> -->
 		</view>
-		<!-- 
+		
 		<view class="ad-1">
-			<image src="/static/temp/ad1.jpg" mode="scaleToFill"></image>
-		</view> -->
+			<!-- <image src="/static/temp/ad1.jpg" mode="scaleToFill"></image> -->
+			<image src="http://img2.imgtn.bdimg.com/it/u=2654545200,2023680138&fm=15&gp=0.jpg" mode="scaleToFill"></image>
+		</view>
 		
 		<!-- 秒杀楼层 -->
-		<!-- <view class="seckill-section m-t">
+		<view class="seckill-section m-t">
 			<view class="s-header">
 				<image class="s-img" src="/static/temp/secskill-img.jpg" mode="widthFix"></image>
 				<text class="tip">8点场</text>
@@ -72,14 +77,15 @@
 					>
 						<image :src="item.image" mode="aspectFill"></image>
 						<text class="title clamp">{{item.title}}</text>
-						<text class="price">￥{{item.price}}</text>
+						<text class="price">￥{{item.sales}}</text>
+						<text class="m-price">￥{{item.price}}</text> 
 					</view>
 				</view>
 			</scroll-view>
-		</view> -->
+		</view>
 		
 		<!-- 团购楼层 -->
-		<!-- <view class="f-header m-t">
+		<view class="f-header m-t">
 			<image src="/static/temp/h1.png"></image>
 			<view class="tit-box">
 				<text class="tit">精品团购</text>
@@ -132,7 +138,7 @@
 				</swiper-item>
 
 			</swiper>
-		</view> -->
+		</view>
 		
 		
 		
@@ -147,7 +153,8 @@
 		</view>
 		<view class="hot-floor">
 			<view class="floor-img-box">
-				<image class="floor-img" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553409398864&di=4a12763adccf229133fb85193b7cc08f&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201703%2F19%2F20170319150032_MNwmn.jpeg" mode="scaleToFill"></image>
+				<!-- <image class="floor-img" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553409398864&di=4a12763adccf229133fb85193b7cc08f&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201703%2F19%2F20170319150032_MNwmn.jpeg" mode="scaleToFill"></image> -->
+				<image class="floor-img" src="http://img4.imgtn.bdimg.com/it/u=2910192546,3357077702&fm=15&gp=0.jpg" mode="scaleToFill"></image>
 			</view>
 			<scroll-view class="floor-list" scroll-x>
 				<view class="scoll-wrapper">
@@ -169,7 +176,8 @@
 		</view>
 		<view class="hot-floor">
 			<view class="floor-img-box">
-				<image class="floor-img" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553409984228&di=dee176242038c2d545b7690b303d65ea&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F5ef4da9f17faaf4612f0d5046f4161e556e9bbcfdb5b-rHjf00_fw658" mode="scaleToFill"></image>
+				<!-- <image class="floor-img" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553409984228&di=dee176242038c2d545b7690b303d65ea&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F5ef4da9f17faaf4612f0d5046f4161e556e9bbcfdb5b-rHjf00_fw658" mode="scaleToFill"></image> -->
+				<image class="floor-img" src="http://img3.imgtn.bdimg.com/it/u=2331731316,1476933435&fm=26&gp=0.jpg" mode="scaleToFill"></image>
 			</view>
 			<scroll-view class="floor-list" scroll-x>
 				<view class="scoll-wrapper">
@@ -189,7 +197,7 @@
 				</view>
 			</scroll-view>
 		</view>
-		<view class="hot-floor">
+		<!-- <view class="hot-floor">
 			<view class="floor-img-box">
 				<image class="floor-img" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553409794730&di=12b840ec4f5748ef06880b85ff63e34e&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01dc03589ed568a8012060c82ac03c.jpg%40900w_1l_2o_100sh.jpg" mode="scaleToFill"></image>
 			</view>
@@ -210,13 +218,13 @@
 					</view>
 				</view>
 			</scroll-view>
-		</view>
+		</view> -->
 
 		<!-- 猜你所需 -->
 		<view class="f-header m-t">
 			<image src="/static/temp/h1.png"></image>
 			<view class="tit-box">
-				<text class="tit">猜你所需</text>
+				<text class="tit">随便逛逛</text>
 				<text class="tit2">Guess You Like It</text>
 			</view>
 			<text class="yticon icon-you"></text>
@@ -243,13 +251,13 @@
 <script>
 
 	export default {
-
 		data() {
 			return {
 				titleNViewBackground: '',
 				swiperCurrent: 0,
 				swiperLength: 0,
 				carouselList: [],
+				typeList: [],
 				goodsList: []
 			};
 		},
@@ -270,6 +278,8 @@
 				
 				let goodsList = await this.$api.json('goodsList');
 				this.goodsList = goodsList || [];
+				
+				this.typeList = await this.$api.json('typeList');
 			},
 			//轮播图切换修改背景色
 			swiperChange(e) {
@@ -527,6 +537,12 @@
 			}
 			.price{
 				color: $uni-color-primary;
+			}
+			.m-price{
+				font-size: $font-sm+2upx;
+				text-decoration: line-through;
+				color: $font-color-light;
+				margin-left: 8upx;
 			}
 		}
 	}

@@ -7489,9 +7489,9 @@ module.exports = g;
 
 /***/ }),
 /* 4 */
-/*!**********************************************************!*\
-  !*** D:/work/HBuilderProjects/mix-mall_1.0.7/pages.json ***!
-  \**********************************************************/
+/*!*****************************************************!*\
+  !*** D:/work/HBuilderProjects/ufuankang/pages.json ***!
+  \*****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8393,9 +8393,9 @@ module.exports = {"_from":"@dcloudio/uni-stat@next","_id":"@dcloudio/uni-stat@2.
 
 /***/ }),
 /* 7 */
-/*!***************************************************************************!*\
-  !*** D:/work/HBuilderProjects/mix-mall_1.0.7/pages.json?{"type":"style"} ***!
-  \***************************************************************************/
+/*!**********************************************************************!*\
+  !*** D:/work/HBuilderProjects/ufuankang/pages.json?{"type":"style"} ***!
+  \**********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8404,9 +8404,9 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 /***/ }),
 /* 8 */
-/*!**************************************************************************!*\
-  !*** D:/work/HBuilderProjects/mix-mall_1.0.7/pages.json?{"type":"stat"} ***!
-  \**************************************************************************/
+/*!*********************************************************************!*\
+  !*** D:/work/HBuilderProjects/ufuankang/pages.json?{"type":"stat"} ***!
+  \*********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8415,9 +8415,9 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 /***/ }),
 /* 9 */
-/*!**************************************************************!*\
-  !*** D:/work/HBuilderProjects/mix-mall_1.0.7/store/index.js ***!
-  \**************************************************************/
+/*!*********************************************************!*\
+  !*** D:/work/HBuilderProjects/ufuankang/store/index.js ***!
+  \*********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8445,6 +8445,7 @@ var store = new _vuex.default.Store({
     },
     logout: function logout(state) {
       state.hasLogin = false;
+      //测试git
       state.userInfo = {};
       uni.removeStorage({
         key: 'userInfo' });
@@ -9522,9 +9523,9 @@ function normalizeComponent (
 
 /***/ }),
 /* 17 */
-/*!*******************************************************!*\
-  !*** D:/work/HBuilderProjects/mix-mall_1.0.7/Json.js ***!
-  \*******************************************************/
+/*!**************************************************!*\
+  !*** D:/work/HBuilderProjects/ufuankang/Json.js ***!
+  \**************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9551,8 +9552,20 @@ var carouselList = [{
 
 {
   src: "/static/temp/banner4.jpg",
-  background: "rgb(183, 73, 69)" }];
+  background: "rgb(183, 73, 69)"
 
+  // src: "/static/ufak/gmsj.jpg",
+  // 	background: "rgb(203, 87, 60)",
+  // },
+  // {
+  // 	src: "/static/ufak/sks.jpg",
+  // 	background: "rgb(205, 215, 218)",
+  // },
+  // {
+  // 	src: "/static/ufak/lksb.jpg",
+  // 	background: "rgb(183, 73, 69)",
+  // }
+}];
 
 /* 商品列表 */
 var goodsList = [{
