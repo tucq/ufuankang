@@ -79,7 +79,7 @@ const goodsList = [{
 	{
 		image: "http://img0.imgtn.bdimg.com/it/u=3434567011,4158908799&fm=26&gp=0.jpg",
 		image2: "http://m.360buyimg.com/n12/jfs/t247/42/1078640382/162559/3628a0b/53f5ad09N0dd79894.jpg%21q70.jpg",
-		image3: "http://ikids.61kids.com.cn/upload/2018-12-29/1546070626796114.jpg",
+		image3: "http://img5.imgtn.bdimg.com/it/u=2507906240,3603726295&fm=26&gp=0.jpg",
 		title: "消毒水",
 		price: 108.8,
 		sales: 5,
@@ -93,7 +93,7 @@ const goodsList = [{
 	}, {
 		image: "http://p1.qhimgs4.com/t01766fbbae179efc8b.jpg",
 		image2: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553418265666&di=d4a7f7eb0ae3c859edeb921641ee1c3a&imgtype=0&src=http%3A%2F%2Fimg003.hc360.cn%2Fy3%2FM02%2FF8%2F9F%2FwKhQh1TuSkGELIlQAAAAAPuLl4M987.jpg",
-		image3: "http://img.ef43.com.cn/product/2016/8/05100204b0c.jpg",
+		image3: "http://img3.imgtn.bdimg.com/it/u=678043953,318214146&fm=15&gp=0.jpg",
 		title: "防护服",
 		price: 422,
 		sales: 137,

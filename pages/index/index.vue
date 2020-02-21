@@ -55,7 +55,7 @@
 		
 		<view class="ad-1">
 			<!-- <image src="/static/temp/ad1.jpg" mode="scaleToFill"></image> -->
-			<image src="http://img2.imgtn.bdimg.com/it/u=2654545200,2023680138&fm=15&gp=0.jpg" mode="scaleToFill"></image>
+			<image src="http://img2.imgtn.bdimg.com/it/u=2654545200,2023680138&fm=15&gp=0.jpg" mode="scaleToFill" @click="appRequest()"></image>
 		</view>
 		
 		<!-- 秒杀楼层 -->
@@ -266,6 +266,21 @@
 			this.loadData();
 		},
 		methods: {
+			appRequest(){
+				uni.request({
+				    url: 'https://127.0.0.1:8090/demo/get?param=123', //仅为示例，并非真实接口地址。
+				    data: {
+				        text: 'uni.request'
+				    },
+				    header: {
+				        'custom-header': 'hello' //自定义请求头信息
+				    },
+				    success: (res) => {
+				        console.log(res.data);
+				        this.text = 'request success';
+				    }
+				});
+			},
 			/**
 			 * 请求静态数据只是为了代码不那么乱
 			 * 分次请求未作整合

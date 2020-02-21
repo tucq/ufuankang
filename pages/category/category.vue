@@ -52,7 +52,6 @@
 				if(!this.sizeCalcState){
 					this.calcSize();
 				}
-				
 				this.currentId = item.id;
 				let index = this.slist.findIndex(sitem=>sitem.pid === item.id);
 				this.tabScrollTop = this.slist[index].top;
@@ -84,6 +83,7 @@
 				this.sizeCalcState = true;
 			},
 			navToList(sid, tid){
+				console.log("分类跳转地址：",`/pages/product/list?fid=${this.currentId}&sid=${sid}&tid=${tid}`);
 				uni.navigateTo({
 					url: `/pages/product/list?fid=${this.currentId}&sid=${sid}&tid=${tid}`
 				})
