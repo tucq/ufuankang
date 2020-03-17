@@ -15,7 +15,7 @@
 			<view class="titleNview-background" :style="{backgroundColor:titleNViewBackground}"></view>
 			<swiper class="carousel" circular @change="swiperChange">
 				<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @click="navToDetailPage({title: '轮播广告'})">
-					<image :src="item.src" />
+					<image :src="'http://localhost:8080/jeecg-boot/sys/common/view/' + item.imgUrl" />
 				</swiper-item>
 			</swiper>
 			<!-- 自定义swiper指示器 -->
@@ -52,7 +52,6 @@
 				<text>分类5</text>
 			</view> -->
 		</view>
-		<button open-type="getUserInfo" @getuserinfo="bindgetuserinfo" class="btn1">授权微信登陆</button>
 
 		<view class="ad-1">
 			<!-- <image src="/static/temp/ad1.jpg" mode="scaleToFill"></image> -->
@@ -255,60 +254,39 @@
 		},
 		methods: {
 			appRequest() {
-				// uni.request({
-				// 	url: 'https://127.0.0.1:8090/demo/get?param=123', //仅为示例，并非真实接口地址。
-				// 	data: {
-				// 		text: 'uni.request'
-				// 	},
-				// 	header: {
-				// 		'custom-header': 'hello' //自定义请求头信息
-				// 	},
-				// 	success: (res) => {
-				// 		console.log("111111",res.data);
-				// 		this.text = 'request success';
-				// 	}
-				// });
-				// uni.login({
-				// 	provider: 'weixin',
-				// 	success: function(loginRes) {
-				// 		console.log(loginRes.authResult);
-				// 		// 获取用户信息
-				// 		uni.getUserInfo({
-				// 			provider: 'weixin',
-				// 			success: function(infoRes) {
-				// 				console.log('用户昵称为：' + infoRes.userInfo.nickName);
-				// 			}
-				// 		});
-				// 	}
-				// });
-				uni.login({
-				      success: res_login => {
-				
-				      console.log('-------获取code-------')
-				      console.log(res_login.code);
-				              uni.getUserInfo({
-				                     success: info => {
-				
-				                               console.log('-------获取sessionKey、openid(unionid)-------')
-				                               console.log(info);
-				                     }
-				              });
-				      }
+
+			},
+			async loadData() {
+				uni.request({
+				    url: 'http://localhost:8080/jeecg-boot' + '/homepageAds/list',
+				    data: {
+				        pageNo: 1,
+				        pageSize: 2147483647
+				    },
+				    header: {
+				        'custom-header': 'hello' //自定义请求头信息
+				    },
+				    success: (res) => {
+						console.log(res.data);
+						if(res.data.success){
+							let carouselList = res.data.result.records;
+							this.titleNViewBackground = carouselList[0].bgColor;
+							this.swiperLength = carouselList.length;
+							this.carouselList = carouselList;
+							console.log(this.carouselList[0]);
+							console.log(this.swiperLength);
+						}
+				    }
 				});
 				
-			},
-			/**
-			 * 请求静态数据只是为了代码不那么乱
-			 * 分次请求未作整合
-			 */
-			async loadData() {
-				let carouselList = await this.$api.json('carouselList');
-				this.titleNViewBackground = carouselList[0].background;
-				this.swiperLength = carouselList.length;
-				this.carouselList = carouselList;
+				
+				// let carouselList = await this.$api.json('carouselList');
+				// this.titleNViewBackground = carouselList[0].background;
+				// this.swiperLength = carouselList.length;
+				// this.carouselList = carouselList;
 
-				let goodsList = await this.$api.json('goodsList');
-				this.goodsList = goodsList || [];
+				// let goodsList = await this.$api.json('goodsList');
+				// this.goodsList = goodsList || [];
 
 				this.typeList = await this.$api.json('typeList');
 			},
@@ -316,7 +294,7 @@
 			swiperChange(e) {
 				const index = e.detail.current;
 				this.swiperCurrent = index;
-				this.titleNViewBackground = this.carouselList[index].background;
+				this.titleNViewBackground = this.carouselList[index].bgColor;
 			},
 			//详情页
 			navToDetailPage(item) {
