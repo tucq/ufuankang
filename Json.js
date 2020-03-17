@@ -10,6 +10,8 @@ const userInfo = {
 	msg: '提示'
 }
 
+const baseUrl = 'http://localhost:8080/jeecg-boot'
+
 /* 首页轮播图 */
 const carouselList = [{
 	// 	src: "/static/temp/banner3.jpg",
@@ -23,6 +25,8 @@ const carouselList = [{
 	// 	src: "/static/temp/banner4.jpg",
 	// 	background: "rgb(183, 73, 69)",
 	// }
+	
+	//http://a3.att.hudong.com/14/75/01300000164186121366756803686.jpg
 	src: "http://a3.att.hudong.com/14/75/01300000164186121366756803686.jpg",
 		background: "rgb(203, 87, 60)",
 	},
@@ -48,15 +52,6 @@ const typeList = [
 	{src: "/static/temp/c3.png",title: "分类3",},
 	{src: "/static/temp/c4.png",title: "分类4",},
 	{src: "/static/temp/c5.png",title: "分类5",},
-	// {src: "/static/temp/c6.png",title: "分类6",},
-	// {src: "/static/temp/c7.png",title: "分类7",},
-	// {src: "/static/temp/c8.png",title: "分类8",},
-	// {src: "/static/temp/c6.png",title: "分类6",},
-	// {src: "/static/temp/c7.png",title: "分类7",},
-	// {src: "/static/temp/c8.png",title: "分类8",},
-	// {src: "/static/temp/c6.png",title: "分类6",},
-	// {src: "/static/temp/c7.png",title: "分类7",},
-	// {src: "/static/temp/c8.png",title: "分类8",},
 ]
 
 /* 商品列表 */
