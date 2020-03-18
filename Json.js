@@ -10,8 +10,6 @@ const userInfo = {
 	msg: '提示'
 }
 
-const baseUrl = 'http://localhost:8080/jeecg-boot'
-
 /* 首页轮播图 */
 const carouselList = [{
 	// 	src: "/static/temp/banner3.jpg",
@@ -734,5 +732,5 @@ export default {
 	shareList,
 	goodsList,
 	orderList,
-	cateList
+	cateList,
 }
