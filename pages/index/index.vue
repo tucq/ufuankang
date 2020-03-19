@@ -14,7 +14,7 @@
 			<!-- 背景色区域 -->
 			<view class="titleNview-background" :style="{backgroundColor:titleNViewBackground}"></view>
 			<swiper class="carousel" circular @change="swiperChange">
-				<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @click="navToDetailPage({title: '轮播广告'})">
+				<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @click="navToDetailPage(item)">
 					<image :src="'http://localhost:8080/jeecg-boot/sys/common/view/' + item.imgUrl" />
 				</swiper-item>
 			</swiper>
@@ -47,7 +47,7 @@
 		<view class="f-header m-t">
 			<image src="/static/temp/h1.png"></image>
 			<view class="tit-box">
-				<text class="tit">热销商品</text>
+				<text class="tit">随便看看</text>
 				<!-- <text class="tit2">Guess You Like It</text> -->
 			</view>
 			<text class="yticon icon-you" @click="moreSellWell"></text>
@@ -56,12 +56,13 @@
 		<view class="guess-section">
 			<view v-for="(item, index) in productList" :key="index" class="guess-item" @click="navToDetailPage(item)">
 				<view class="image-wrapper">
-					<image :src="'http://localhost:8080/jeecg-boot/sys/common/view/' + item.image.split(',')[0]" mode="aspectFill"></image>
+					<image :src="'http://localhost:8080/jeecg-boot/sys/common/view/' + item.viewImage" mode="aspectFill"></image>
 				</view>
 				<text class="title clamp">{{item.name}}</text>
+				<text class="description">{{item.description}}</text>
 				<view class="price-box">
-					<text class="price">￥100</text>
-					<text class="m-price">￥188</text>
+					<text class="price">￥{{item.price}}</text>
+					<text class="m-price">￥{{item.virtualPrice}}</text>
 				</view>
 			</view>
 		</view>
@@ -93,7 +94,10 @@
 			async loadData() {
 				uni.request({
 					url: this.baseUrl + '/api/home/list',
-					data: {},
+					data: {
+						pageNo: 1,
+						pageSize: 10,
+					},
 					header: {},
 					success: (res) => {
 						if (res.data.success) {
@@ -108,17 +112,6 @@
 						}
 					}
 				});
-
-
-				// let carouselList = await this.$api.json('carouselList');
-				// this.titleNViewBackground = carouselList[0].background;
-				// this.swiperLength = carouselList.length;
-				// this.carouselList = carouselList;
-
-				// let goodsList = await this.$api.json('goodsList');
-				// this.goodsList = goodsList || [];
-
-				
 			},
 			//轮播图切换修改背景色
 			swiperChange(e) {
@@ -129,11 +122,18 @@
 			//详情页
 			navToDetailPage(item) {
 				//测试数据没有写id，用title代替
-				let id = item.title;
+				let id = item.id;
 				console.log("详情页id", id);
-				uni.navigateTo({
-					url: `/pages/product/product?id=${id}`
-				})
+				if(item.isList == '0'){
+					uni.navigateTo({
+						url: `/pages/product/product?id=${id}`
+					})
+				}else{
+					uni.navigateTo({
+						url: `/pages/ads/list?id=${id}`
+					})
+				}
+				
 			},
 			moreSellWell(){
 				this.$api.msg('点击了更多热销商品');
@@ -665,5 +665,11 @@
 			color: $font-color-light;
 			margin-left: 8upx;
 		}
+	}
+	
+	.description{
+		font-size: $font-sm;
+		color: $font-color-base;
+		line-height: 50upx;
 	}
 </style>
