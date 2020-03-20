@@ -66,12 +66,20 @@
 				</view>
 			</view>
 		</view>
+		
+		<uni-load-more :status="loadingType" ></uni-load-more>
 
 	</view>
 </template>
 
 <script>
+	
+	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
+	
 	export default {
+		components: {
+			uniLoadMore	
+		},
 		data() {
 			return {
 				titleNViewBackground: '',
@@ -80,10 +88,15 @@
 				carouselList: [],
 				typeList: [],
 				insertList: [],
-				productList: []
+				productList: [],
+				totalCount: 0,
+				pageNo: 0,
 			};
 		},
-
+		//加载更多
+		onReachBottom(){
+			this.loadData();
+		},
 		onLoad() {
 			this.loadData();
 		},
