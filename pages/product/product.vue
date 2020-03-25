@@ -5,7 +5,7 @@
 				<swiper-item class="swiper-item" v-for="(item,index) in imgList" :key="index">
 					<view class="image-wrapper">
 						<image
-							:src="item.src" 
+							:src="'http://localhost:8080/jeecg-boot/sys/common/view/' + item"
 							class="loaded" 
 							mode="aspectFill"
 						></image>
@@ -15,33 +15,18 @@
 		</view>
 		
 		<view class="introduce-section">
-			<text class="title">恒源祥2019春季长袖白色t恤 新款春装</text>
+			<text class="title">{{productInfo.name}}</text>
 			<view class="price-box">
 				<text class="price-tip">¥</text>
-				<text class="price">341.6</text>
-				<text class="m-price">¥488</text>
-				<text class="coupon-tip">7折</text>
+				<text class="price">{{productInfo.price}}</text>
+				<text class="m-price">{{productInfo.virtualPrice}}</text>
+				<!-- <text class="coupon-tip">7折</text> -->
 			</view>
 			<view class="bot-row">
-				<text>销量: 108</text>
-				<text>库存: 4690</text>
-				<text>浏览量: 768</text>
+				<text>销量: {{productInfo.salesVolume}}</text>
+				<text>库存: {{productInfo.stock}}</text>
+				<!-- <text>浏览量: 768</text> -->
 			</view>
-		</view>
-		
-		<!--  分享 -->
-		<view class="share-section" @click="share">
-			<view class="share-icon">
-				<text class="yticon icon-xingxing"></text>
-				 返
-			</view>
-			<text class="tit">该商品分享可领49减10红包</text>
-			<text class="yticon icon-bangzhu1"></text>
-			<view class="share-btn">
-				立即分享
-				<text class="yticon icon-you"></text>
-			</view>
-			
 		</view>
 		
 		<view class="c-list">
@@ -54,46 +39,11 @@
 				</view>
 				<text class="yticon icon-you"></text>
 			</view>
-			<view class="c-row b-b">
-				<text class="tit">优惠券</text>
-				<text class="con t-r red">领取优惠券</text>
-				<text class="yticon icon-you"></text>
-			</view>
-			<view class="c-row b-b">
-				<text class="tit">促销活动</text>
-				<view class="con-list">
-					<text>新人首单送20元无门槛代金券</text>
-					<text>订单满50减10</text>
-					<text>订单满100减30</text>
-					<text>单笔购买满两件免邮费</text>
-				</view>
-			</view>
+			
 			<view class="c-row b-b">
 				<text class="tit">服务</text>
 				<view class="bz-list con">
-					<text>7天无理由退换货 ·</text>
-					<text>假一赔十 ·</text>
-				</view>
-			</view>
-		</view>
-		
-		<!-- 评价 -->
-		<view class="eva-section">
-			<view class="e-header">
-				<text class="tit">评价</text>
-				<text>(86)</text>
-				<text class="tip">好评率 100%</text>
-				<text class="yticon icon-you"></text>
-			</view> 
-			<view class="eva-box">
-				<image class="portrait" src="http://img3.imgtn.bdimg.com/it/u=1150341365,1327279810&fm=26&gp=0.jpg" mode="aspectFill"></image>
-				<view class="right">
-					<text class="name">Leo yo</text>
-					<text class="con">商品收到了，79元两件，质量不错，试了一下有点瘦，但是加个外罩很漂亮，我很喜欢</text>
-					<view class="bot">
-						<text class="attr">购买类型：XL 红色</text>
-						<text class="time">2019-04-01 19:21</text>
-					</view>
+					<text v-for="(item,index) in serviceList" :key="index">{{item}}·</text>
 				</view>
 			</view>
 		</view>
@@ -102,7 +52,10 @@
 			<view class="d-header">
 				<text>图文详情</text>
 			</view>
-			<rich-text :nodes="desc"></rich-text>
+			<div style="width:100%" v-for="(item,index) in detailImgList" :key="index">
+				<img style="width:100%;display:block;" :src="'http://localhost:8080/jeecg-boot/sys/common/view/' + item" />
+			</div>
+			
 		</view>
 		
 		<!-- 底部操作菜单 -->
@@ -150,29 +103,36 @@
 						</view>
 					</view>
 				</view>
-				<view v-for="(item,index) in specList" :key="index" class="attr-list">
-					<text>{{item.name}}</text>
+				<view class="attr-list" v-if="specsTitleList.length > 0">
+					<text>{{specsTitleList[0].specsTitle}}</text>
 					<view class="item-list">
 						<text 
-							v-for="(childItem, childIndex) in specChildList" 
-							v-if="childItem.pid === item.id"
-							:key="childIndex" class="tit"
-							:class="{selected: childItem.selected}"
-							@click="selectSpec(childIndex, childItem.pid)"
+							v-for="(item, index) in specsOneList" 
+							:key="item.id" class="tit"
+							:class="{selected: item.selected}"
+							@click="selectSpec(index, item.pid)"
 						>
-							{{childItem.name}}
+							{{item.specsTitle}}
+						</text>
+					</view>
+				</view>
+				<view class="attr-list" v-if="specsTitleList.length > 1">
+					<text>{{specsTitleList[1].specsTitle}}</text>
+					<view class="item-list">
+						<text 
+							v-for="(item, index) in specsTwoList" 
+							:key="item.id" class="tit"
+							:class="{selected: item.selected}"
+							@click="selectSpec(index, item.pid)"
+						>
+							{{item.specsTitle}}
 						</text>
 					</view>
 				</view>
 				<button class="btn" @click="toggleSpec">完成</button>
 			</view>
 		</view>
-		<!-- 分享 -->
-		<share 
-			ref="share" 
-			:contentHeight="580"
-			:shareList="shareList"
-		></share>
+		
 	</view>
 </template>
 
@@ -184,110 +144,50 @@
 		},
 		data() {
 			return {
+				productInfo: {},
+				imgList: [],
+				detailImgList: [],
+				serviceList: [],
+				specsTitleList: [],
+				specsOneList: [],
+				specsTwoList: [],
 				specClass: 'none',
 				specSelected:[],
-				
 				favorite: true,
-				shareList: [],
-				imgList: [
-					{
-						src: 'https://gd3.alicdn.com/imgextra/i3/0/O1CN01IiyFQI1UGShoFKt1O_!!0-item_pic.jpg_400x400.jpg'
-					},
-					{
-						src: 'https://gd3.alicdn.com/imgextra/i3/TB1RPFPPFXXXXcNXpXXXXXXXXXX_!!0-item_pic.jpg_400x400.jpg'
-					},
-					{
-						src: 'https://gd2.alicdn.com/imgextra/i2/38832490/O1CN01IYq7gu1UGShvbEFnd_!!38832490.jpg_400x400.jpg'
-					}
-				],
-				desc: `
-					<div style="width:100%">
-						<img style="width:100%;display:block;" src="https://gd3.alicdn.com/imgextra/i4/479184430/O1CN01nCpuLc1iaz4bcSN17_!!479184430.jpg_400x400.jpg" />
-						<img style="width:100%;display:block;" src="https://gd2.alicdn.com/imgextra/i2/479184430/O1CN01gwbN931iaz4TzqzmG_!!479184430.jpg_400x400.jpg" />
-						<img style="width:100%;display:block;" src="https://gd3.alicdn.com/imgextra/i3/479184430/O1CN018wVjQh1iaz4aupv1A_!!479184430.jpg_400x400.jpg" />
-						<img style="width:100%;display:block;" src="https://gd4.alicdn.com/imgextra/i4/479184430/O1CN01tWg4Us1iaz4auqelt_!!479184430.jpg_400x400.jpg" />
-						<img style="width:100%;display:block;" src="https://gd1.alicdn.com/imgextra/i1/479184430/O1CN01Tnm1rU1iaz4aVKcwP_!!479184430.jpg_400x400.jpg" />
-					</div>
-				`,
-				specList: [
-					{
-						id: 1,
-						name: '尺寸',
-					},
-					{	
-						id: 2,
-						name: '颜色',
-					},
-				],
-				specChildList: [
-					{
-						id: 1,
-						pid: 1,
-						name: 'XS',
-					},
-					{
-						id: 2,
-						pid: 1,
-						name: 'S',
-					},
-					{
-						id: 3,
-						pid: 1,
-						name: 'M',
-					},
-					{
-						id: 4,
-						pid: 1,
-						name: 'L',
-					},
-					{
-						id: 5,
-						pid: 1,
-						name: 'XL',
-					},
-					{
-						id: 6,
-						pid: 1,
-						name: 'XXL',
-					},
-					{
-						id: 7,
-						pid: 2,
-						name: '白色',
-					},
-					{
-						id: 8,
-						pid: 2,
-						name: '珊瑚粉',
-					},
-					{
-						id: 9,
-						pid: 2,
-						name: '草木绿',
-					},
-				]
 			};
 		},
 		async onLoad(options){
-			
-			//接收传值,id里面放的是标题，因为测试数据并没写id 
-			let id = options.id;
-			if(id){
-				this.$api.msg(`点击了${id}`);
-			}
+			let productId = options.productId;
+			uni.request({
+				url: this.baseUrl + '/api/product/'+productId,
+				data: {},
+				header: {},
+				success: (res) => {
+					if (res.data.success) {
+						this.productInfo = res.data.result;
+						this.imgList = this.productInfo.image.substring(0,this.productInfo.image.length-1).split(',');
+						this.detailImgList = this.productInfo.detailImages.substring(0,this.productInfo.detailImages.length-1).split(',');
+						this.serviceList = this.productInfo.service.split(',');
+						this.specsTitleList = this.productInfo.specsTitleList;
+						this.specsOneList = this.productInfo.specsOneList;
+						this.specsTwoList = this.productInfo.specsTwoList;
+						
+						console.log(this.productInfo);
+					}
+				},
+			});
 			
 			
 			//规格 默认选中第一条
-			this.specList.forEach(item=>{
-				for(let cItem of this.specChildList){
-					if(cItem.pid === item.id){
-						this.$set(cItem, 'selected', true);
-						this.specSelected.push(cItem);
-						break; //forEach不能使用break
-					}
-				}
-			})
-			this.shareList = await this.$api.json('shareList');
+			// this.specList.forEach(item=>{
+			// 	for(let cItem of this.specChildList){
+			// 		if(cItem.pid === item.id){
+			// 			this.$set(cItem, 'selected', true);
+			// 			this.specSelected.push(cItem);
+			// 			break; //forEach不能使用break
+			// 		}
+			// 	}
+			// })
 		},
 		methods:{
 			//规格弹窗开关

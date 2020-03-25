@@ -22,12 +22,14 @@
 				@click="navToDetailPage(item)"
 			>
 				<view class="image-wrapper">
-					<image :src="item.image" mode="aspectFill"></image>
+					<image :src="'http://localhost:8080/jeecg-boot/sys/common/view/' + item.viewImage" mode="aspectFill"></image>
 				</view>
-				<text class="title clamp">{{item.title}}</text>
+				<text class="title clamp">{{item.name}}</text>
+				<text class="description">{{item.description}}</text>
 				<view class="price-box">
 					<text class="price">{{item.price}}</text>
-					<text>已售 {{item.sales}}</text>
+					<text class="m-price">￥{{item.virtualPrice}}</text>
+					<text>已售 {{item.salesVolume}}</text>
 				</view>
 			</view>
 		</view>
@@ -47,10 +49,13 @@
 				headerPosition:"fixed",
 				headerTop:"0px",
 				loadingType: 'more', //加载更多状态
-				filterIndex: 0, 
+				filterIndex: 1, 
 				priceOrder: 0, //1 价格从低到高 2价格从高到低
+				orderByValue: 1,//排序值 0-综合,1-销量,2-价格低到高,3-价格高到低
 				categoryId: '',
-				productList: []
+				productList: [],
+				totalCount: 0,
+				pageNo: 0,
 			};
 		},
 		
@@ -78,51 +83,8 @@
 			this.loadData();
 		},
 		methods: {
-			// //加载商品 ，带下拉刷新和上滑加载
-			// async loadData(type='add', loading) {
-			// 	//没有更多直接返回
-			// 	if(type === 'add'){
-			// 		if(this.loadingType === 'nomore'){
-			// 			return;
-			// 		}
-			// 		this.loadingType = 'loading';
-			// 	}else{
-			// 		this.loadingType = 'more'
-			// 	}
-				
-			// 	let goodsList = await this.$api.json('goodsList');
-			// 	if(type === 'refresh'){
-			// 		this.goodsList = [];
-			// 	}
-			// 	//筛选，测试数据直接前端筛选了
-			// 	if(this.filterIndex === 1){
-			// 		goodsList.sort((a,b)=>b.sales - a.sales)
-			// 	}
-			// 	if(this.filterIndex === 2){
-			// 		goodsList.sort((a,b)=>{
-			// 			if(this.priceOrder == 1){
-			// 				return a.price - b.price;
-			// 			}
-			// 			return b.price - a.price;
-			// 		})
-			// 	}
-				
-			// 	this.goodsList = this.goodsList.concat(goodsList);
-				
-			// 	//判断是否还有下一页，有是more  没有是nomore(测试数据判断大于20就没有了)
-			// 	this.loadingType  = this.goodsList.length > 20 ? 'nomore' : 'more';
-			// 	if(type === 'refresh'){
-			// 		if(loading == 1){
-			// 			uni.hideLoading()
-			// 		}else{
-			// 			uni.stopPullDownRefresh();
-			// 		}
-			// 	}
-			// },
 			//加载商品 ，带下拉刷新和上滑加载
 			async loadData(type='add', loading) {
-				xxxxxxxxxxxxxxxxxx
-				xxxxxxxxxxxxxxxx
 				this.pageNo ++;
 				//没有更多直接返回
 				if(type === 'add'){
@@ -139,18 +101,11 @@
 					this.productList = [];
 				}
 				
-				if(type === 'refresh'){
-					if(loading == 1){
-						uni.hideLoading()
-					}else{
-						uni.stopPullDownRefresh();
-					}
-				}
-				
 				uni.request({
-					url: this.baseUrl + '/api/home/ads/product',
+					url: this.baseUrl + '/api/category/product/list',
 					data: {
 						categoryId: this.categoryId,
+						orderByValue: this.orderByValue,
 						pageNo: this.pageNo,
 						pageSize: 10,
 					},
@@ -161,8 +116,20 @@
 							this.totalCount = res.data.result.total
 							this.loadingType  = this.productList.length + 1 > this.totalCount ? 'nomore' : 'more';
 						}
-					}
+					},
+					complete: (res) => {
+						if(type === 'refresh'){
+							if(loading == 1){
+								uni.hideLoading()
+							}else{
+								uni.stopPullDownRefresh();
+							}
+						}
+					},
 				});
+				
+				
+				
 			},
 			//筛选点击
 			tabClick(index){
@@ -172,8 +139,10 @@
 				this.filterIndex = index;
 				if(index === 2){
 					this.priceOrder = this.priceOrder === 1 ? 2: 1;
+					this.orderByValue = this.priceOrder === 1 ? 2: 3;
 				}else{
 					this.priceOrder = 0;
+					this.orderByValue = index;
 				}
 				uni.pageScrollTo({
 					duration: 300,
@@ -188,12 +157,11 @@
 			//详情
 			navToDetailPage(item){
 				//测试数据没有写id，用title代替
-				let id = item.title;
+				let productId = item.id;
 				uni.navigateTo({
-					url: `/pages/product/product?id=${id}`
+					url: `/pages/product/product?productId=${productId}`
 				})
 			},
-			stopPrevent(){}
 		},
 	}
 </script>
@@ -383,6 +351,18 @@
 				font-size: 26upx;
 			}
 		}
+		.m-price {
+			font-size: $font-sm+2upx;
+			text-decoration: line-through;
+			color: $font-color-light;
+			align-items: left;
+		}
+	}
+	
+	.description{
+		font-size: $font-sm+2upx;
+		color: $font-color-base;
+		line-height: 50upx;
 	}
 	
 
