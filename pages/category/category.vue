@@ -9,8 +9,8 @@
 			<view v-for="item in slist" :key="item.id" class="s-list" :id="'main-'+item.id">
 				<text class="s-item">{{item.name}}</text>
 				<view class="t-list">
-					<view @click="navToList(item.id, titem.id)" v-if="titem.pid === item.id" class="t-item" v-for="titem in tlist" :key="titem.id">
-						<image :src="titem.picture"></image>
+					<view @click="navToList(titem.id)" v-if="titem.pid === item.id" class="t-item" v-for="titem in tlist" :key="titem.id">
+						<image :src="'http://localhost:8080/jeecg-boot/sys/common/view/' + titem.image"></image>
 						<text>{{titem.name}}</text>
 					</view>
 				</view>
@@ -36,16 +36,27 @@
 		},
 		methods: {
 			async loadData(){
-				let list = await this.$api.json('cateList');
-				list.forEach(item=>{
-					if(!item.pid){
-						this.flist.push(item);  //pid为父级id, 没有pid或者pid=0是一级分类
-					}else if(!item.picture){
-						this.slist.push(item); //没有图的是2级分类
-					}else{
-						this.tlist.push(item); //3级分类
+				uni.request({
+					url: this.baseUrl + '/api/category/list',
+					data: {},
+					header: {},
+					success: (res) => {
+						if (res.data.success) {
+							let list = res.data.result;
+							list.forEach(item=>{
+								if(item.pid == '0'){
+									this.flist.push(item);  //pid为父级id, 没有pid或者pid=0是一级分类
+								}else if(!item.image){
+									this.slist.push(item); //没有图的是2级分类
+								}else{
+									this.tlist.push(item); //3级分类
+								}
+							})
+						}
 					}
-				}) 
+				});
+				
+				
 			},
 			//一级分类点击
 			tabtap(item){
@@ -82,10 +93,9 @@
 				})
 				this.sizeCalcState = true;
 			},
-			navToList(sid, tid){
-				console.log("分类跳转地址：",`/pages/product/list?fid=${this.currentId}&sid=${sid}&tid=${tid}`);
+			navToList(tid){
 				uni.navigateTo({
-					url: `/pages/product/list?fid=${this.currentId}&sid=${sid}&tid=${tid}`
+					url: `/pages/product/list?categoryId=${tid}`
 				})
 			}
 		}

@@ -28,7 +28,7 @@
 		<!-- 分类 -->
 		<view v-if="typeList.length > 0">
 			<view class="cate-section">
-				<view class="cate-item" v-for="(item, index) in typeList" :key="index">
+				<view class="cate-item" v-for="(item, index) in typeList" :key="index" @click="navToDetailPage(item)">
 					<image :src="'http://localhost:8080/jeecg-boot/sys/common/view/' + item.imgUrl"></image>
 					<text>{{item.adsName}}</text>
 				</view>
@@ -38,7 +38,7 @@
 		<view v-if="insertList.length > 0">
 			<view class="ad-1">
 				<!-- <image src="/static/temp/ad1.jpg" mode="scaleToFill"></image> -->
-				<image :src="'http://localhost:8080/jeecg-boot/sys/common/view/' + insertList[0].imgUrl" mode="scaleToFill" @click="appRequest()"></image>
+				<image :src="'http://localhost:8080/jeecg-boot/sys/common/view/' + insertList[0].imgUrl" mode="scaleToFill" @click="navToDetailPage(insertList[0])"></image>
 			</view>
 		</view>
 
@@ -91,25 +91,25 @@
 				productList: [],
 				totalCount: 0,
 				pageNo: 0,
+				pageSize: 10,
+				loadingType: 'more', //加载更多状态
 			};
 		},
 		//加载更多
 		onReachBottom(){
-			this.loadData();
+			this.loadDataMore();
 		},
 		onLoad() {
 			this.loadData();
 		},
 		methods: {
-			appRequest() {
-
-			},
 			async loadData() {
+				this.pageNo = 1;
 				uni.request({
 					url: this.baseUrl + '/api/home/list',
 					data: {
-						pageNo: 1,
-						pageSize: 10,
+						pageNo: this.pageNo,
+						pageSize: this.pageSize,
 					},
 					header: {},
 					success: (res) => {
@@ -122,6 +122,29 @@
 							this.typeList = res.data.result.categoryList;
 							this.insertList = res.data.result.insertList;
 							this.productList = res.data.result.productList;
+						}
+					}
+				});
+			},
+			async loadDataMore() {
+				if(this.loadingType === 'nomore'){
+					return;
+				}
+				this.loadingType = 'loading';
+				this.pageNo ++;
+				uni.request({
+					url: this.baseUrl + '/api/home/random/product',
+					data: {
+						pageNo: this.pageNo,
+						pageSize: this.pageSize,
+					},
+					header: {},
+					success: (res) => {
+						if (res.data.success) {
+							console.log("res.data.result.total",res.data.result.total);
+							this.productList = this.productList.concat(res.data.result.records);
+							this.totalCount = res.data.result.total
+							this.loadingType  = this.productList.length + 1 > this.totalCount ? 'nomore' : 'more';
 						}
 					}
 				});
@@ -681,7 +704,7 @@
 	}
 	
 	.description{
-		font-size: $font-sm;
+		font-size: $font-sm+2upx;
 		color: $font-color-base;
 		line-height: 50upx;
 	}

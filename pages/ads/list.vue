@@ -10,8 +10,10 @@
 					<image :src="'http://localhost:8080/jeecg-boot/sys/common/view/' + item.viewImage" mode="aspectFill"></image>
 				</view>
 				<text class="title clamp">{{item.name}}</text>
+				<text class="description">{{item.description}}</text>
 				<view class="price-box">
 					<text class="price">{{item.price}}</text>
+					<text class="m-price">￥{{item.virtualPrice}}</text>
 					<text>已售 {{item.salesVolume}}</text>
 				</view>
 			</view>
@@ -33,6 +35,7 @@
 				headerTop:"0px",
 				loadingType: 'more', //加载更多状态
 				filterIndex: 0, 
+				adsId: '',
 				productList: [],
 				totalCount: 0,
 				pageNo: 0,
@@ -88,7 +91,6 @@
 						uni.stopPullDownRefresh();
 					}
 				}
-				
 				uni.request({
 					url: this.baseUrl + '/api/home/ads/product',
 					data: {
@@ -303,6 +305,18 @@
 				font-size: 26upx;
 			}
 		}
+		.m-price {
+			font-size: $font-sm+2upx;
+			text-decoration: line-through;
+			color: $font-color-light;
+			align-items: left;
+		}
+	}
+	
+	.description{
+		font-size: $font-sm+2upx;
+		color: $font-color-base;
+		line-height: 50upx;
 	}
 	
 
