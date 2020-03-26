@@ -133,23 +133,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _regenerator = _interopRequireDefault(__webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ 24));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var share = function share() {return __webpack_require__.e(/*! import() | components/share */ "components/share").then(__webpack_require__.bind(null, /*! @/components/share */ 163));};var _default =
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _regenerator = _interopRequireDefault(__webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ 24));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var uniNumberBox = function uniNumberBox() {return __webpack_require__.e(/*! import() | components/uni-number-box */ "components/uni-number-box").then(__webpack_require__.bind(null, /*! @/components/uni-number-box.vue */ 186));};var _default =
 
 
 
@@ -315,114 +299,54 @@ __webpack_require__.r(__webpack_exports__);
 
 {
   components: {
-    share: share },
+    uniNumberBox: uniNumberBox },
 
   data: function data() {
     return {
+      productInfo: {},
+      imgList: [],
+      detailImgList: [],
+      serviceList: [],
+      specsTitleList: [],
+      specsOneList: [],
+      specsTwoList: [],
+      priceList: [],
+      priceSelected: {},
       specClass: 'none',
-      specSelected: [],
-
-      favorite: true,
-      shareList: [],
-      imgList: [
-      {
-        src: 'https://gd3.alicdn.com/imgextra/i3/0/O1CN01IiyFQI1UGShoFKt1O_!!0-item_pic.jpg_400x400.jpg' },
-
-      {
-        src: 'https://gd3.alicdn.com/imgextra/i3/TB1RPFPPFXXXXcNXpXXXXXXXXXX_!!0-item_pic.jpg_400x400.jpg' },
-
-      {
-        src: 'https://gd2.alicdn.com/imgextra/i2/38832490/O1CN01IYq7gu1UGShvbEFnd_!!38832490.jpg_400x400.jpg' }],
-
-
-      desc: "\n\t\t\t\t<div style=\"width:100%\">\n\t\t\t\t\t<img style=\"width:100%;display:block;\" src=\"https://gd3.alicdn.com/imgextra/i4/479184430/O1CN01nCpuLc1iaz4bcSN17_!!479184430.jpg_400x400.jpg\" />\n\t\t\t\t\t<img style=\"width:100%;display:block;\" src=\"https://gd2.alicdn.com/imgextra/i2/479184430/O1CN01gwbN931iaz4TzqzmG_!!479184430.jpg_400x400.jpg\" />\n\t\t\t\t\t<img style=\"width:100%;display:block;\" src=\"https://gd3.alicdn.com/imgextra/i3/479184430/O1CN018wVjQh1iaz4aupv1A_!!479184430.jpg_400x400.jpg\" />\n\t\t\t\t\t<img style=\"width:100%;display:block;\" src=\"https://gd4.alicdn.com/imgextra/i4/479184430/O1CN01tWg4Us1iaz4auqelt_!!479184430.jpg_400x400.jpg\" />\n\t\t\t\t\t<img style=\"width:100%;display:block;\" src=\"https://gd1.alicdn.com/imgextra/i1/479184430/O1CN01Tnm1rU1iaz4aVKcwP_!!479184430.jpg_400x400.jpg\" />\n\t\t\t\t</div>\n\t\t\t",
-
-
-
-
-
-
-
-
-      specList: [
-      {
-        id: 1,
-        name: '尺寸' },
-
-      {
-        id: 2,
-        name: '颜色' }],
-
-
-      specChildList: [
-      {
-        id: 1,
-        pid: 1,
-        name: 'XS' },
-
-      {
-        id: 2,
-        pid: 1,
-        name: 'S' },
-
-      {
-        id: 3,
-        pid: 1,
-        name: 'M' },
-
-      {
-        id: 4,
-        pid: 1,
-        name: 'L' },
-
-      {
-        id: 5,
-        pid: 1,
-        name: 'XL' },
-
-      {
-        id: 6,
-        pid: 1,
-        name: 'XXL' },
-
-      {
-        id: 7,
-        pid: 2,
-        name: '白色' },
-
-      {
-        id: 8,
-        pid: 2,
-        name: '珊瑚粉' },
-
-      {
-        id: 9,
-        pid: 2,
-        name: '草木绿' }] };
-
-
+      favorite: false };
 
   },
-  onLoad: function () {var _onLoad = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(options) {var _this = this;var id;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:
+  onLoad: function () {var _onLoad = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(options) {var _this = this;var productId;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:
+              productId = options.productId;
+              uni.request({
+                url: this.baseUrl + '/api/product/' + productId,
+                data: {},
+                header: {},
+                success: function success(res) {
+                  if (res.data.success) {
+                    _this.productInfo = res.data.result;
+                    _this.productInfo.quantity = 1;
+                    _this.imgList = _this.productInfo.image.substring(0, _this.productInfo.image.length - 1).split(',');
+                    _this.detailImgList = _this.productInfo.detailImages.substring(0, _this.productInfo.detailImages.length - 1).split(',');
+                    _this.serviceList = _this.productInfo.service.split(',');
+                    _this.specsTitleList = _this.productInfo.specsTitleList;
+                    _this.specsOneList = _this.productInfo.specsOneList;
+                    _this.specsTwoList = _this.productInfo.specsTwoList;
+                    _this.priceList = _this.productInfo.priceList;
 
-              //接收传值,id里面放的是标题，因为测试数据并没写id 
-              id = options.id;
-              if (id) {
-                this.$api.msg("\u70B9\u51FB\u4E86".concat(id));
-              }
+                    console.log("this.specsTitleList", _this.specsTitleList);
+                    console.log("this.specsOneList", _this.specsOneList);
+                    console.log("this.specsTwoList", _this.specsTwoList);
+                    console.log("this.priceList", _this.priceList);
 
 
-              //规格 默认选中第一条
-              this.specList.forEach(function (item) {var _iteratorNormalCompletion = true;var _didIteratorError = false;var _iteratorError = undefined;try {
-                  for (var _iterator = _this.specChildList[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {var cItem = _step.value;
-                    if (cItem.pid === item.id) {
-                      _this.$set(cItem, 'selected', true);
-                      _this.specSelected.push(cItem);
-                      break; //forEach不能使用break
-                    }
-                  }} catch (err) {_didIteratorError = true;_iteratorError = err;} finally {try {if (!_iteratorNormalCompletion && _iterator.return != null) {_iterator.return();}} finally {if (_didIteratorError) {throw _iteratorError;}}}
-              });_context.next = 5;return (
-                this.$api.json('shareList'));case 5:this.shareList = _context.sent;case 6:case "end":return _context.stop();}}}, _callee, this);}));function onLoad(_x) {return _onLoad.apply(this, arguments);}return onLoad;}(),
+                    _this.initDefaultPrice();
+                  }
+                } });case 2:case "end":return _context.stop();}}}, _callee, this);}));function onLoad(_x) {return _onLoad.apply(this, arguments);}return onLoad;}(),
+
+
+
+
 
   methods: {
     //规格弹窗开关
@@ -436,38 +360,72 @@ __webpack_require__.r(__webpack_exports__);
         this.specClass = 'show';
       }
     },
+    initDefaultPrice: function initDefaultPrice() {
+      for (var i = 0; i < this.priceList.length; i++) {
+        var pitem = this.priceList[i];
+        if (pitem.defaultFlag === '0') {
+          var specs1Id = pitem.specs1Id;
+          for (var j = 0; j < this.specsOneList.length; j++) {
+            if (specs1Id === this.specsOneList[j].id) {
+              this.selectSpec(j, specs1Id, 1);
+              break;
+            }
+          }
+          if (this.specsTitleList.length > 1) {
+            var specs2Id = pitem.specs2Id;
+            for (var k = 0; k < this.specsTwoList.length; k++) {
+              if (specs2Id === this.specsTwoList[k].id) {
+                this.selectSpec(k, specs2Id, 2);
+                break;
+              }
+            }
+          }
+
+          break;
+        }
+      }
+    },
     //选择规格
-    selectSpec: function selectSpec(index, pid) {var _this3 = this;
-      var list = this.specChildList;
-      list.forEach(function (item) {
-        if (item.pid === pid) {
+    selectSpec: function selectSpec(index, id, type) {var _this3 = this;
+      var specList = [];
+      if (type === 1) {
+        specList = this.specsOneList;
+        this.priceSelected.specs1Id = this.specsOneList[index].id;
+      } else {
+        specList = this.specsTwoList;
+        this.priceSelected.specs2Id = this.specsTwoList[index].id;
+      }
+
+      specList.forEach(function (item) {
+        if (item.id != id) {
           _this3.$set(item, 'selected', false);
         }
       });
 
-      this.$set(list[index], 'selected', true);
-      //存储已选择
-      /**
-       * 修复选择规格存储错误
-       * 将这几行代码替换即可
-       * 选择的规格存放在specSelected中
-       */
-      this.specSelected = [];
-      list.forEach(function (item) {
-        if (item.selected === true) {
-          _this3.specSelected.push(item);
+      this.$set(specList[index], 'selected', true);
+
+      for (var i = 0; i < this.priceList.length; i++) {
+        var item = this.priceList[i];
+        if (item.specs1Id == this.priceSelected.specs1Id && item.specs2Id == this.priceSelected.specs2Id) {
+          this.priceSelected.specs1Id = item.specs1Id;
+          this.priceSelected.specs2Id = item.specs2Id;
+          this.priceSelected.price = item.price;
+          this.priceSelected.virtualPrice = item.virtualPrice;
+          this.priceSelected.stock = item.stock;
+          this.priceSelected.specsName = item.specsName;
+          this.priceSelected.specsImage = item.specsImage;
+          break;
         }
-      });
+      }
 
     },
-    //分享
-    share: function share() {
-      this.$refs.share.toggleMask();
+    numberChange: function numberChange(data) {
+      this.productInfo.quantity = data.number;
     },
     //收藏
-    toFavorite: function toFavorite() {
-      this.favorite = !this.favorite;
-    },
+    // toFavorite(){
+    // 	this.favorite = !this.favorite;
+    // },
     buy: function buy() {
       uni.navigateTo({
         url: "/pages/order/createOrder" });

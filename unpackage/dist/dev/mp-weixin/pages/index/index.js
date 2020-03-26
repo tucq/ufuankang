@@ -95,27 +95,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "recyclableRender", function() { return recyclableRender; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
-var components
+var components = {
+  "uni-load-more": () =>
+    __webpack_require__.e(/*! import() | components/uni-load-more/uni-load-more */ "components/uni-load-more/uni-load-more").then(__webpack_require__.bind(null, /*! @/components/uni-load-more/uni-load-more.vue */ 179))
+}
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  var l0 = _vm.__map(_vm.productList, function(item, index) {
-    var g0 = item.image.split(",")
-    return {
-      $orig: _vm.__get_orig(item),
-      g0: g0
-    }
-  })
-
-  _vm.$mp.data = Object.assign(
-    {},
-    {
-      $root: {
-        l0: l0
-      }
-    }
-  )
 }
 var recyclableRender = false
 var staticRenderFns = []
@@ -149,79 +136,88 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _regenerator = _interopRequireDefault(__webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ 24));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};} //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default =
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _regenerator = _interopRequireDefault(__webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ 24));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var uniLoadMore = function uniLoadMore() {return __webpack_require__.e(/*! import() | components/uni-load-more/uni-load-more */ "components/uni-load-more/uni-load-more").then(__webpack_require__.bind(null, /*! @/components/uni-load-more/uni-load-more.vue */ 179));};var _default =
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {
+  components: {
+    uniLoadMore: uniLoadMore },
+
   data: function data() {
     return {
       titleNViewBackground: '',
@@ -230,21 +226,29 @@ var _default =
       carouselList: [],
       typeList: [],
       insertList: [],
-      productList: [] };
-
+      productList: [],
+      totalCount: 0,
+      pageNo: 0,
+      pageSize: 10,
+      loadingType: 'more' //加载更多状态
+    };
   },
-
+  //加载更多
+  onReachBottom: function onReachBottom() {
+    this.loadDataMore();
+  },
   onLoad: function onLoad() {
     this.loadData();
   },
   methods: {
-    appRequest: function appRequest() {
-
-    },
     loadData: function () {var _loadData = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {var _this = this;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:
+                this.pageNo = 1;
                 uni.request({
                   url: this.baseUrl + '/api/home/list',
-                  data: {},
+                  data: {
+                    pageNo: this.pageNo,
+                    pageSize: this.pageSize },
+
                   header: {},
                   success: function success(res) {
                     if (res.data.success) {
@@ -257,18 +261,30 @@ var _default =
                       _this.insertList = res.data.result.insertList;
                       _this.productList = res.data.result.productList;
                     }
-                  } });
+                  } });case 2:case "end":return _context.stop();}}}, _callee, this);}));function loadData() {return _loadData.apply(this, arguments);}return loadData;}(),
 
 
+    loadDataMore: function () {var _loadDataMore = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {var _this2 = this;return _regenerator.default.wrap(function _callee2$(_context2) {while (1) {switch (_context2.prev = _context2.next) {case 0:if (!(
+                this.loadingType === 'nomore')) {_context2.next = 2;break;}return _context2.abrupt("return");case 2:
 
-                // let carouselList = await this.$api.json('carouselList');
-                // this.titleNViewBackground = carouselList[0].background;
-                // this.swiperLength = carouselList.length;
-                // this.carouselList = carouselList;
 
-                // let goodsList = await this.$api.json('goodsList');
-                // this.goodsList = goodsList || [];
-              case 1:case "end":return _context.stop();}}}, _callee, this);}));function loadData() {return _loadData.apply(this, arguments);}return loadData;}(),
+                this.loadingType = 'loading';
+                this.pageNo++;
+                uni.request({
+                  url: this.baseUrl + '/api/home/random/product',
+                  data: {
+                    pageNo: this.pageNo,
+                    pageSize: this.pageSize },
+
+                  header: {},
+                  success: function success(res) {
+                    if (res.data.success) {
+                      console.log("res.data.result.total", res.data.result.total);
+                      _this2.productList = _this2.productList.concat(res.data.result.records);
+                      _this2.totalCount = res.data.result.total;
+                      _this2.loadingType = _this2.productList.length + 1 > _this2.totalCount ? 'nomore' : 'more';
+                    }
+                  } });case 5:case "end":return _context2.stop();}}}, _callee2, this);}));function loadDataMore() {return _loadDataMore.apply(this, arguments);}return loadDataMore;}(),
 
 
     //轮播图切换修改背景色
@@ -280,10 +296,17 @@ var _default =
     //详情页
     navToDetailPage: function navToDetailPage(item) {
       //测试数据没有写id，用title代替
-      var id = item.title;
+      var id = item.id;
       console.log("详情页id", id);
-      uni.navigateTo({
-        url: "/pages/product/product?id=".concat(id) });
+      if (item.isList == '0') {
+        uni.navigateTo({
+          url: "/pages/product/product?id=".concat(id) });
+
+      } else {
+        uni.navigateTo({
+          url: "/pages/ads/list?id=".concat(id) });
+
+      }
 
     },
     moreSellWell: function moreSellWell() {

@@ -55,7 +55,7 @@ _vue.default.config.productionTip = false;
 _vue.default.prototype.$fire = new _vue.default();
 _vue.default.prototype.$store = _store.default;
 _vue.default.prototype.$api = { msg: msg, json: json, prePage: prePage };
-_vue.default.prototype.baseUrl = 'http://localhost:8080/jeecg-boot';
+_vue.default.prototype.baseUrl = 'http://localhost:30221/jeecg-boot';
 
 _App.default.mpType = 'app';
 

@@ -131,8 +131,12 @@
 				this[key][index].image = '/static/errorImage.jpg';
 			},
 			navToLogin(){
+				// uni.navigateTo({
+				// 	url: '/pages/public/login'
+				// })
+				
 				uni.navigateTo({
-					url: '/pages/public/login'
+					url: '/pages/public/wxLogin'
 				})
 			},
 			 //选中状态处理

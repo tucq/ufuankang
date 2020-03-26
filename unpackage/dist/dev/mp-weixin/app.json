@@ -6,6 +6,7 @@
     "pages/userinfo/userinfo",
     "pages/cart/cart",
     "pages/public/login",
+    "pages/public/wxLogin",
     "pages/user/user",
     "pages/detail/detail",
     "pages/order/order",
@@ -17,7 +18,8 @@
     "pages/money/paySuccess",
     "pages/notice/notice",
     "pages/category/category",
-    "pages/product/list"
+    "pages/product/list",
+    "pages/ads/list"
   ],
   "subPackages": [],
   "window": {
@@ -63,5 +65,6 @@
       "desc": ""
     }
   },
-  "usingComponents": {}
+  "usingComponents": {},
+  "sitemapLocation": "sitemap58.json"
 }
