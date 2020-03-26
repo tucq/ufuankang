@@ -15,16 +15,19 @@
 		</view>
 		
 		<view class="introduce-section">
-			<text class="title">{{productInfo.name}}</text>
+			<view class="uni-flex uni-row">
+				<view><text class="title">{{productInfo.name}}</text></view>
+				<view><text class="description">{{productInfo.description}}</text></view>
+			</view>
 			<view class="price-box">
 				<text class="price-tip">¥</text>
-				<text class="price">{{productInfo.price}}</text>
-				<text class="m-price">{{productInfo.virtualPrice}}</text>
+				<text class="price">{{priceSelected.price}}</text>
+				<text class="m-price">{{priceSelected.virtualPrice}}</text>
 				<!-- <text class="coupon-tip">7折</text> -->
 			</view>
 			<view class="bot-row">
 				<text>销量: {{productInfo.salesVolume}}</text>
-				<text>库存: {{productInfo.stock}}</text>
+				<text>库存: {{priceSelected.stock}}</text>
 				<!-- <text>浏览量: 768</text> -->
 			</view>
 		</view>
@@ -33,9 +36,12 @@
 			<view class="c-row b-b" @click="toggleSpec">
 				<text class="tit">购买类型</text>
 				<view class="con">
-					<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
-						{{sItem.name}}
+					<text class="selected-text">
+						{{priceSelected.specsName}} {{productInfo.quantity}}件
 					</text>
+					<!-- <text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
+						{{sItem.name}}
+					</text> -->
 				</view>
 				<text class="yticon icon-you"></text>
 			</view>
@@ -68,10 +74,10 @@
 				<text class="yticon icon-gouwuche"></text>
 				<text>购物车</text>
 			</navigator>
-			<view class="p-b-btn" :class="{active: favorite}" @click="toFavorite">
+			<!-- <view class="p-b-btn" :class="{active: favorite}" @click="toFavorite">
 				<text class="yticon icon-shoucang"></text>
 				<text>收藏</text>
-			</view>
+			</view> -->
 			
 			<view class="action-btn-group">
 				<button type="primary" class=" action-btn no-border buy-now-btn" @click="buy">立即购买</button>
@@ -91,18 +97,24 @@
 			<view class="mask"></view>
 			<view class="layer attr-content" @click.stop="stopPrevent">
 				<view class="a-t">
-					<image src="https://gd3.alicdn.com/imgextra/i3/0/O1CN01IiyFQI1UGShoFKt1O_!!0-item_pic.jpg_400x400.jpg"></image>
+					<image :src="'http://localhost:8080/jeecg-boot/sys/common/view/' + priceSelected.specsImage"></image>
 					<view class="right">
-						<text class="price">¥328.00</text>
-						<text class="stock">库存：188件</text>
+						<view class="price-box">
+							<text class="price-tip">¥</text>
+							<text class="price">{{priceSelected.price}}</text>
+							<text class="m-price">{{priceSelected.virtualPrice}}</text>
+							<!-- <text class="coupon-tip">7折</text> -->
+						</view>
+						<text class="stock">库存：{{priceSelected.stock}}</text>
 						<view class="selected">
-							已选：
-							<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
+							已选：{{priceSelected.specsName}}
+							<!-- <text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
 								{{sItem.name}}
-							</text>
+							</text> -->
 						</view>
 					</view>
 				</view>
+				
 				<view class="attr-list" v-if="specsTitleList.length > 0">
 					<text>{{specsTitleList[0].specsTitle}}</text>
 					<view class="item-list">
@@ -110,7 +122,7 @@
 							v-for="(item, index) in specsOneList" 
 							:key="item.id" class="tit"
 							:class="{selected: item.selected}"
-							@click="selectSpec(index, item.pid)"
+							@click="selectSpec(index, item.id,1)"
 						>
 							{{item.specsTitle}}
 						</text>
@@ -123,11 +135,21 @@
 							v-for="(item, index) in specsTwoList" 
 							:key="item.id" class="tit"
 							:class="{selected: item.selected}"
-							@click="selectSpec(index, item.pid)"
+							@click="selectSpec(index, item.id,2)"
 						>
 							{{item.specsTitle}}
 						</text>
 					</view>
+				</view>
+				
+				<view class="attr-list">
+					<text>数量</text>
+					<uni-number-box class="step"
+						 :min="1" 
+						 :max="priceSelected.stock"
+						 :value='1'
+						 @eventChange="numberChange">
+					 </uni-number-box>
 				</view>
 				<button class="btn" @click="toggleSpec">完成</button>
 			</view>
@@ -137,10 +159,12 @@
 </template>
 
 <script>
-	import share from '@/components/share';
+	
+	import uniNumberBox from '@/components/uni-number-box.vue'
+	
 	export default{
 		components: {
-			share
+			uniNumberBox
 		},
 		data() {
 			return {
@@ -151,9 +175,10 @@
 				specsTitleList: [],
 				specsOneList: [],
 				specsTwoList: [],
+				priceList: [],
+				priceSelected: {},
 				specClass: 'none',
-				specSelected:[],
-				favorite: true,
+				favorite: false,
 			};
 		},
 		async onLoad(options){
@@ -165,29 +190,28 @@
 				success: (res) => {
 					if (res.data.success) {
 						this.productInfo = res.data.result;
+						this.productInfo.quantity = 1;
 						this.imgList = this.productInfo.image.substring(0,this.productInfo.image.length-1).split(',');
 						this.detailImgList = this.productInfo.detailImages.substring(0,this.productInfo.detailImages.length-1).split(',');
 						this.serviceList = this.productInfo.service.split(',');
 						this.specsTitleList = this.productInfo.specsTitleList;
 						this.specsOneList = this.productInfo.specsOneList;
 						this.specsTwoList = this.productInfo.specsTwoList;
+						this.priceList = this.productInfo.priceList;
 						
-						console.log(this.productInfo);
+						console.log("this.specsTitleList",this.specsTitleList);
+						console.log("this.specsOneList",this.specsOneList);
+						console.log("this.specsTwoList",this.specsTwoList);
+						console.log("this.priceList",this.priceList);
+						
+						
+						this.initDefaultPrice();
 					}
 				},
 			});
 			
 			
-			//规格 默认选中第一条
-			// this.specList.forEach(item=>{
-			// 	for(let cItem of this.specChildList){
-			// 		if(cItem.pid === item.id){
-			// 			this.$set(cItem, 'selected', true);
-			// 			this.specSelected.push(cItem);
-			// 			break; //forEach不能使用break
-			// 		}
-			// 	}
-			// })
+			
 		},
 		methods:{
 			//规格弹窗开关
@@ -201,38 +225,72 @@
 					this.specClass = 'show';
 				}
 			},
+			initDefaultPrice(){
+				for(let i=0;i<this.priceList.length;i++){
+					let pitem = this.priceList[i];
+					if(pitem.defaultFlag === '0'){
+						let specs1Id = pitem.specs1Id;
+						for(let j=0;j<this.specsOneList.length;j++){
+							if(specs1Id === this.specsOneList[j].id){
+								this.selectSpec(j, specs1Id,1);
+								break;
+							}
+						}
+						if(this.specsTitleList.length > 1){
+							let specs2Id = pitem.specs2Id;
+							for(let k=0;k<this.specsTwoList.length;k++){
+								if(specs2Id === this.specsTwoList[k].id){
+									this.selectSpec(k, specs2Id,2);
+									break;
+								}
+							}
+						}
+						
+						break;
+					}
+				}
+			},
 			//选择规格
-			selectSpec(index, pid){
-				let list = this.specChildList;
-				list.forEach(item=>{
-					if(item.pid === pid){
+			selectSpec(index, id,type){
+				let specList = [];
+				if(type === 1){
+					specList = this.specsOneList;
+					this.priceSelected.specs1Id = this.specsOneList[index].id;
+				}else{
+					specList = this.specsTwoList;
+					this.priceSelected.specs2Id = this.specsTwoList[index].id;
+				}
+				
+				specList.forEach(item=>{
+					if(item.id != id){
 						this.$set(item, 'selected', false);
 					}
 				})
-
-				this.$set(list[index], 'selected', true);
-				//存储已选择
-				/**
-				 * 修复选择规格存储错误
-				 * 将这几行代码替换即可
-				 * 选择的规格存放在specSelected中
-				 */
-				this.specSelected = []; 
-				list.forEach(item=>{ 
-					if(item.selected === true){ 
-						this.specSelected.push(item); 
-					} 
-				})
+				
+				this.$set(specList[index], 'selected', true);
+				
+				for(let i=0;i<this.priceList.length;i++){
+					let item = this.priceList[i];
+					if(item.specs1Id == this.priceSelected.specs1Id && item.specs2Id == this.priceSelected.specs2Id){
+						this.priceSelected.specs1Id = item.specs1Id;
+						this.priceSelected.specs2Id = item.specs2Id;
+						this.priceSelected.price = item.price;
+						this.priceSelected.virtualPrice = item.virtualPrice;
+						this.priceSelected.stock = item.stock;
+						this.priceSelected.specsName = item.specsName;
+						this.priceSelected.specsImage = item.specsImage;
+						break;
+					}
+				}
 				
 			},
-			//分享
-			share(){
-				this.$refs.share.toggleMask();	
+			numberChange(data){
+				this.productInfo.quantity = data.number;
 			},
 			//收藏
-			toFavorite(){
-				this.favorite = !this.favorite;
-			},
+			// toFavorite(){
+			// 	this.favorite = !this.favorite;
+			// },
 			buy(){
 				uni.navigateTo({
 					url: `/pages/order/createOrder`
@@ -539,6 +597,11 @@
 					color: $uni-color-primary;
 					margin-bottom: 10upx;
 				}
+				.m-price{
+					margin:0 12upx;
+					color: $font-color-light;
+					text-decoration: line-through;
+				}
 				.selected-text{
 					margin-right: 10upx;
 				}
@@ -739,5 +802,17 @@
 			}
 		}
 	}
+	
+	.uni-numbox {
+		position: inherit;
+		margin-top: 20upx;
+	}	
+	
+	.description{
+		font-size: $font-sm+2upx;
+		color: $font-color-base;
+		line-height: 50upx;
+	}
+	
 	
 </style>
