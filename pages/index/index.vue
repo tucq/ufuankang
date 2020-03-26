@@ -59,7 +59,7 @@
 					<image :src="'http://localhost:8080/jeecg-boot/sys/common/view/' + item.viewImage" mode="aspectFill"></image>
 				</view>
 				<text class="title clamp">{{item.name}}</text>
-				<text class="description">{{item.description}}</text>
+				<text class="pro-list-desc">{{item.description}}</text>
 				<view class="price-box">
 					<text class="price">￥{{item.price}}</text>
 					<text class="m-price">￥{{item.virtualPrice}}</text>
@@ -703,9 +703,5 @@
 		}
 	}
 	
-	.description{
-		font-size: $font-sm+2upx;
-		color: $font-color-base;
-		line-height: 50upx;
-	}
+	
 </style>
