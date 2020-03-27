@@ -43,6 +43,7 @@
                         let avatarUrl = infoRes.userInfo.avatarUrl; //头像
 						console.log("nickName",nickName);
 						console.log("avatarUrl",avatarUrl);
+						console.log("infoRes",infoRes);
                         try {
                             uni.setStorageSync('isCanUse', false);//记录是否第一次授权  false:表示不是第一次授权
                             _this.updateUserInfo();
@@ -64,7 +65,9 @@
                     provider: 'weixin',
                     success: function(loginRes) {
                         let code = loginRes.code;
+						console.log("login.loginRes",loginRes);
 						console.log("code",code);
+						console.log("_this.isCanUse",_this.isCanUse);
                         if (!_this.isCanUse) {
                             //非第一次授权获取用户信息
                             uni.getUserInfo({
@@ -82,7 +85,7 @@
             
                         //2.将用户登录code传递到后台置换用户SessionKey、OpenId等信息
                         uni.request({
-                            url: '服务器地址',
+                            url: this.baseUrl + '/sys/wxLogin',
                             data: {
                                 code: code,
                             },
