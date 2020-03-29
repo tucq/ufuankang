@@ -98,6 +98,7 @@
 		},
 		onLoad(){
 			this.loadData();
+			console.log("...mapState(['hasLogin'])",mapState(['hasLogin']));
 		},
 		watch:{
 			//显示空白页

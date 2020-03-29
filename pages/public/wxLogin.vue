@@ -3,9 +3,11 @@
         <!-- #ifdef MP-WEIXIN -->
         <view v-if="isCanUse">
             <view>
+				<!-- <view class="back-btn yticon icon-zuojiantou-up" @click="navBack"></view> -->
                 <view class='header'>
-                    <image src='/static/wx_login.png'></image>
+                    <image src='/static/basicprofile.jpg'></image>
                 </view>
+				
                 <view class='content'>
                     <view>申请获取以下权限</view>
                     <text>获得你的公开信息(昵称，头像、地区等)</text>
@@ -21,6 +23,10 @@
 </template>
 
 <script>
+	import {
+	    mapMutations  
+	} from 'vuex';
+	
     export default {
         data() {
             return {
@@ -32,103 +38,80 @@
             };
         },
         methods: {
+			...mapMutations(['login']),
             //第一授权获取用户信息===》按钮触发
-            wxGetUserInfo() {
-				console.log("this.isCanUse",this.isCanUse);
-                let _this = this;
-                uni.getUserInfo({
-                    provider: 'weixin',
-                    success: function(infoRes) {
-                        let nickName = infoRes.userInfo.nickName; //昵称
-                        let avatarUrl = infoRes.userInfo.avatarUrl; //头像
-						console.log("nickName",nickName);
-						console.log("avatarUrl",avatarUrl);
-						console.log("infoRes",infoRes);
-                        try {
-                            uni.setStorageSync('isCanUse', false);//记录是否第一次授权  false:表示不是第一次授权
-                            _this.updateUserInfo();
-                        } catch (e) {}
-                    },
-                    fail(res) {}
-                });
+          async wxGetUserInfo() {
+			   let userInfo = {};
+			   let that = this;
+				uni.login({
+				   provider: 'weixin',
+				   success: function(loginRes) {
+					   uni.getUserInfo({
+						   provider: 'weixin',
+						   success: function(infoRes) {
+							   let code = loginRes.code;
+							   uni.request({
+								   url: 'http://localhost:30221/jeecg-boot/sys/getOpenid',
+								   data: {
+									   code: code,
+									   encryptedData: infoRes.encryptedData,
+									   iv: infoRes.iv,
+								   },
+								   method: 'GET',
+								   header: {
+									   'content-type': 'application/json'
+								   },
+								   success: (res) => {
+									   uni.hideLoading();
+									   if(res.data.status === 1){
+										   userInfo = {
+											   id: res.data.userId,
+											   nickname: res.data.nickname,
+											   portrait: res.data.avatarUrl
+										   }
+										   try {
+										       uni.setStorageSync('WX_TOKEN', res.data.WX_TOKEN);//同步缓存TOKEN
+										   } catch (e) {}
+										   
+										   if(userInfo.id){
+												that.login(userInfo);
+												uni.navigateBack();  
+										   }else{
+												uni.showToast({
+													title: '授权登陆失败',
+													icon: 'none',
+													duration: 3000
+												});
+										   }
+										   
+									   }else{
+										   uni.showToast({
+										   	title: '微信授权失败,请稍后重试',
+										   	icon: 'none',
+										   	duration: 3000
+										   });
+									   }
+									   
+								   }
+							   });
+						   },
+						   fail(res) {
+								uni.showToast({
+									title: "福安康提醒您，授权通过后方可购物哦！",
+									icon: 'none',
+									duration: 3000,
+								})
+						   },
+					   });
+					   
+				   },
+				   
+				});
+				
             },
-
-　　　　　　	//登录
-            login() {
-                let _this = this;
-                uni.showLoading({
-                    title: '登录中...'
-                });
-             
-               // 1.wx获取登录用户code
-                uni.login({
-                    provider: 'weixin',
-                    success: function(loginRes) {
-                        let code = loginRes.code;
-						console.log("login.loginRes",loginRes);
-						console.log("code",code);
-						console.log("_this.isCanUse",_this.isCanUse);
-                        if (!_this.isCanUse) {
-                            //非第一次授权获取用户信息
-                            uni.getUserInfo({
-                                provider: 'weixin',
-                                success: function(infoRes) {
- 　　　　　　　　　　　　　　　　　　　　　　//获取用户信息后向调用信息更新方法
-                                    let nickName = infoRes.userInfo.nickName; //昵称
-                                    let avatarUrl = infoRes.userInfo.avatarUrl; //头像
-									console.log("nickName2",nickName);
-									console.log("avatarUrl2",avatarUrl);
-                                        _this.updateUserInfo();//调用更新信息方法
-                                }
-                            });
-                        }
-            
-                        //2.将用户登录code传递到后台置换用户SessionKey、OpenId等信息
-                        uni.request({
-                            url: this.baseUrl + '/sys/wxLogin',
-                            data: {
-                                code: code,
-                            },
-                            method: 'GET',
-                            header: {
-                                'content-type': 'application/json'
-                            },
-                            success: (res) => {
-                                //openId、或SessionKdy存储//隐藏loading
-                                uni.hideLoading();
-                            }
-                        });
-                    },
-                });
-            },
-         //向后台更新信息
-            updateUserInfo() {
-                let _this = this;
-                uni.request({
-                    url:'url' ,//服务器端地址
-                    data: {
-                        appKey: this.$store.state.appKey,
-                        customerId: _this.customerId,
-                        nickName: _this.nickName,
-                        headUrl: _this.avatarUrl
-                    },
-                    method: 'POST',
-                    header: {
-                        'content-type': 'application/json'
-                    },
-                    success: (res) => {
-                        if (res.data.state == "success") {
-                            uni.reLaunch({//信息更新成功后跳转到小程序首页
-                                url: '/pages/index/index'
-                            });
-                        }
-                    }
-                   
-                });
-            }
         },
         onLoad() {//默认加载
-            this.login();
+            // this.login();
         }
     }
 </script>

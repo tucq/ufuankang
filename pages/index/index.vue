@@ -15,7 +15,7 @@
 			<view class="titleNview-background" :style="{backgroundColor:titleNViewBackground}"></view>
 			<swiper class="carousel" circular @change="swiperChange">
 				<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @click="navToDetailPage(item)">
-					<image :src="'http://localhost:8080/jeecg-boot/sys/common/view/' + item.imgUrl" />
+					<image :src="'http://localhost:30221/jeecg-boot/sys/common/view/' + item.imgUrl" />
 				</swiper-item>
 			</swiper>
 			<!-- 自定义swiper指示器 -->
@@ -29,7 +29,7 @@
 		<view v-if="typeList.length > 0">
 			<view class="cate-section">
 				<view class="cate-item" v-for="(item, index) in typeList" :key="index" @click="navToDetailPage(item)">
-					<image :src="'http://localhost:8080/jeecg-boot/sys/common/view/' + item.imgUrl"></image>
+					<image :src="'http://localhost:30221/jeecg-boot/sys/common/view/' + item.imgUrl"></image>
 					<text>{{item.adsName}}</text>
 				</view>
 			</view>
@@ -38,7 +38,7 @@
 		<view v-if="insertList.length > 0">
 			<view class="ad-1">
 				<!-- <image src="/static/temp/ad1.jpg" mode="scaleToFill"></image> -->
-				<image :src="'http://localhost:8080/jeecg-boot/sys/common/view/' + insertList[0].imgUrl" mode="scaleToFill" @click="navToDetailPage(insertList[0])"></image>
+				<image :src="'http://localhost:30221/jeecg-boot/sys/common/view/' + insertList[0].imgUrl" mode="scaleToFill" @click="navToDetailPage(insertList[0])"></image>
 			</view>
 		</view>
 
@@ -56,7 +56,7 @@
 		<view class="guess-section">
 			<view v-for="(item, index) in productList" :key="index" class="guess-item" @click="navToDetailPage(item)">
 				<view class="image-wrapper">
-					<image :src="'http://localhost:8080/jeecg-boot/sys/common/view/' + item.viewImage" mode="aspectFill"></image>
+					<image :src="'http://localhost:30221/jeecg-boot/sys/common/view/' + item.viewImage" mode="aspectFill"></image>
 				</view>
 				<text class="title clamp">{{item.name}}</text>
 				<text class="pro-list-desc">{{item.description}}</text>

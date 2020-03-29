@@ -5,7 +5,7 @@
 				<swiper-item class="swiper-item" v-for="(item,index) in imgList" :key="index">
 					<view class="image-wrapper">
 						<image
-							:src="'http://localhost:8080/jeecg-boot/sys/common/view/' + item"
+							:src="'http://localhost:30221/jeecg-boot/sys/common/view/' + item"
 							class="loaded" 
 							mode="aspectFill"
 						></image>
@@ -59,7 +59,7 @@
 				<text>图文详情</text>
 			</view>
 			<div style="width:100%" v-for="(item,index) in detailImgList" :key="index">
-				<img style="width:100%;display:block;" :src="'http://localhost:8080/jeecg-boot/sys/common/view/' + item" />
+				<img style="width:100%;display:block;" :src="'http://localhost:30221/jeecg-boot/sys/common/view/' + item" />
 			</div>
 			
 		</view>
@@ -97,7 +97,7 @@
 			<view class="mask"></view>
 			<view class="layer attr-content" @click.stop="stopPrevent">
 				<view class="a-t">
-					<image :src="'http://localhost:8080/jeecg-boot/sys/common/view/' + priceSelected.specsImage"></image>
+					<image :src="'http://localhost:30221/jeecg-boot/sys/common/view/' + priceSelected.specsImage"></image>
 					<view class="right">
 						<view class="price-box">
 							<text class="price-tip">¥</text>
@@ -804,7 +804,7 @@
 	}
 	
 	.uni-numbox {
-		position: inherit;
+		position: inherit !important;
 		margin-top: 20upx;
 	}	
 	

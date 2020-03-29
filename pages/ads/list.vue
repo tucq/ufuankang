@@ -7,7 +7,7 @@
 				@click="navToDetailPage(item)"
 			>
 				<view class="image-wrapper">
-					<image :src="'http://localhost:8080/jeecg-boot/sys/common/view/' + item.viewImage" mode="aspectFill"></image>
+					<image :src="'http://localhost:30221/jeecg-boot/sys/common/view/' + item.viewImage" mode="aspectFill"></image>
 				</view>
 				<text class="title clamp">{{item.name}}</text>
 				<text class="pro-list-desc">{{item.description}}</text>

@@ -10,7 +10,7 @@
 				<text class="s-item">{{item.name}}</text>
 				<view class="t-list">
 					<view @click="navToList(titem.id)" v-if="titem.pid === item.id" class="t-item" v-for="titem in tlist" :key="titem.id">
-						<image :src="'http://localhost:8080/jeecg-boot/sys/common/view/' + titem.image"></image>
+						<image :src="'http://localhost:30221/jeecg-boot/sys/common/view/' + titem.image"></image>
 						<text>{{titem.name}}</text>
 					</view>
 				</view>

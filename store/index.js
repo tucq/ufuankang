@@ -10,15 +10,26 @@ const store = new Vuex.Store({
 	},
 	mutations: {
 		login(state, provider) {
-
+			console.log("state=",state);
+			console.log("provider=",provider);
 			state.hasLogin = true;
 			state.userInfo = provider;
 			uni.setStorage({//缓存用户登陆状态
 			    key: 'userInfo',  
 			    data: provider  
 			}) 
+			
 			console.log("store.login=",state.userInfo);
 		},
+		// login(state, provider) {
+		// 	state.hasLogin = true;
+		// 	state.userInfo = provider;
+		// 	uni.setStorage({//缓存用户登陆状态
+		// 	    key: 'userInfo',  
+		// 	    data: provider  
+		// 	}) 
+		// 	console.log("store.login=",state.userInfo);
+		// },
 		logout(state) {
 			state.hasLogin = false;
 			//测试git
