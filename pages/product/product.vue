@@ -80,7 +80,7 @@
 			</view> -->
 			
 			<view class="action-btn-group">
-				<button type="primary" class=" action-btn no-border add-cart-btn">加入购物车</button>
+				<button type="primary" class=" action-btn no-border add-cart-btn" @click="addCar">加入购物车</button>
 				<button type="primary" class=" action-btn no-border buy-now-btn" @click="buy">立即购买</button>
 			</view>
 		</view>
@@ -147,7 +147,7 @@
 					<uni-number-box class="step"
 						 :min="1" 
 						 :max="priceSelected.stock"
-						 :value='1'
+						 :value="1"
 						 @eventChange="numberChange">
 					 </uni-number-box>
 				</view>
@@ -198,12 +198,6 @@
 						this.specsOneList = this.productInfo.specsOneList;
 						this.specsTwoList = this.productInfo.specsTwoList;
 						this.priceList = this.productInfo.priceList;
-						
-						console.log("this.specsTitleList",this.specsTitleList);
-						console.log("this.specsOneList",this.specsOneList);
-						console.log("this.specsTwoList",this.specsTwoList);
-						console.log("this.priceList",this.priceList);
-						
 						
 						this.initDefaultPrice();
 					}
@@ -286,6 +280,45 @@
 			},
 			numberChange(data){
 				this.productInfo.quantity = data.number;
+			},
+			addCar(){
+				let WX_TOKEN = '';
+				let userId = '';
+				try {
+				    const userInfo = uni.getStorageSync('userInfo');
+				    if (userInfo.id) {
+						userId = userInfo.id;
+				    }
+					const token = uni.getStorageSync('WX_TOKEN');
+					if (token) {
+						WX_TOKEN = token;
+					}
+				} catch (e) {}
+				
+				uni.request({
+					url: this.baseUrl + '/shopping/car/add',
+					data: {
+						userId: userId,
+						productId: this.productInfo.id,
+						specs1Id: this.priceSelected.specs1Id,
+						specs2Id: this.priceSelected.specs2Id,
+						buyNum: this.productInfo.quantity,
+					},
+					method: 'POST',
+					header: {
+					   'content-type': 'application/json',
+					   'X-Access-Token': WX_TOKEN,
+					},
+					success: (res) => {
+						if (res.data.success) {
+							uni.showToast({
+								title: '已加入购物车',
+								mask: true,
+								duration: 1500
+							});
+						}
+					},
+				});
 			},
 			//收藏
 			// toFavorite(){

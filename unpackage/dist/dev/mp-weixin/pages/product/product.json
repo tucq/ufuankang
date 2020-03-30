@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "详情展示",
-  "usingComponents": {
-    "uni-number-box": "/components/uni-number-box"
-  }
-}

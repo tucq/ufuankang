@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "优福安康",
-  "usingComponents": {
-    "uni-load-more": "/components/uni-load-more/uni-load-more"
-  }
-}
