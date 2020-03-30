@@ -7612,7 +7612,7 @@ module.exports = g;
 /***/ }),
 /* 4 */
 /*!*****************************************************!*\
-  !*** D:/work/HBuilderProjects/ufuankang/pages.json ***!
+  !*** F:/HBuilderProjects/ufak/ufuankang/pages.json ***!
   \*****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -8519,7 +8519,7 @@ module.exports = {"_from":"@dcloudio/uni-stat@next","_id":"@dcloudio/uni-stat@2.
 /***/ }),
 /* 7 */
 /*!**********************************************************************!*\
-  !*** D:/work/HBuilderProjects/ufuankang/pages.json?{"type":"style"} ***!
+  !*** F:/HBuilderProjects/ufak/ufuankang/pages.json?{"type":"style"} ***!
   \**********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -8530,7 +8530,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 /***/ }),
 /* 8 */
 /*!*********************************************************************!*\
-  !*** D:/work/HBuilderProjects/ufuankang/pages.json?{"type":"stat"} ***!
+  !*** F:/HBuilderProjects/ufak/ufuankang/pages.json?{"type":"stat"} ***!
   \*********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -8541,7 +8541,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 /***/ }),
 /* 9 */
 /*!*********************************************************!*\
-  !*** D:/work/HBuilderProjects/ufuankang/store/index.js ***!
+  !*** F:/HBuilderProjects/ufak/ufuankang/store/index.js ***!
   \*********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -8559,26 +8559,13 @@ var store = new _vuex.default.Store({
 
   mutations: {
     login: function login(state, provider) {
-      console.log("state=", state);
-      console.log("provider=", provider);
       state.hasLogin = true;
       state.userInfo = provider;
       uni.setStorage({ //缓存用户登陆状态
         key: 'userInfo',
         data: provider });
 
-
-      console.log("store.login=", state.userInfo);
     },
-    // login(state, provider) {
-    // 	state.hasLogin = true;
-    // 	state.userInfo = provider;
-    // 	uni.setStorage({//缓存用户登陆状态
-    // 	    key: 'userInfo',  
-    // 	    data: provider  
-    // 	}) 
-    // 	console.log("store.login=",state.userInfo);
-    // },
     logout: function logout(state) {
       state.hasLogin = false;
       //测试git
@@ -9674,7 +9661,7 @@ function normalizeComponent (
 /***/ }),
 /* 17 */
 /*!**************************************************!*\
-  !*** D:/work/HBuilderProjects/ufuankang/Json.js ***!
+  !*** F:/HBuilderProjects/ufak/ufuankang/Json.js ***!
   \**************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
