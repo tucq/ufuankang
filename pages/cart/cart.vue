@@ -37,7 +37,7 @@
 						<view class="item-right">
 							<text class="clamp title">{{item.productName}}</text>
 							<text class="attr">{{item.specsName}}</text>
-							<text class="price">¥{{item.price}}</text>
+							<text class="price">{{item.buyNum}}¥{{item.price}}</text>
 							<uni-number-box 
 								class="step"
 								:min="1" 
@@ -61,17 +61,17 @@
 						mode="aspectFit"
 						@click="check('all')"
 					></image>
-					<view class="clear-btn" :class="{show: allChecked}" @click="clearCart">
+					<!-- <view class="clear-btn" :class="{show: allChecked}" @click="clearCart">
 						清空
-					</view>
+					</view> -->
 				</view>
 				<view class="total-box">
 					<text class="price">¥{{total}}</text>
-					<text class="coupon">
+					<!-- <text class="coupon">
 						已优惠
 						<text>74.35</text>
 						元
-					</text>
+					</text> -->
 				</view>
 				<button type="primary" class="no-border confirm-btn" @click="createOrder">去结算</button>
 			</view>
@@ -90,16 +90,20 @@
 		},
 		data() {
 			return {
-				viewImgUrl: this.baseUrl + '/sys/common/view/',
+				viewImgUrl: this.baseUrl,
 				total: 0, //总价格
 				allChecked: false, //全选状态  true|false
 				empty: false, //空白页现实  true|false
 				cartList: [],
 			};
 		},
+		onShow(){
+			if(this.$store.state.hasLogin){
+				this.loadData();
+			}
+		},
 		onLoad(){
-			this.loadData();
-			console.log("...mapState(['hasLogin'])",mapState(['hasLogin']));
+			
 		},
 		watch:{
 			//显示空白页
@@ -133,28 +137,30 @@
 					url: this.baseUrl + '/shopping/car/list',
 					data: {
 						userId: userId,
+						pageNo: 1,
+						pageSize: 10000,
 					},
 					header: {
 						'X-Access-Token': WX_TOKEN,
 					},
 					success: (res) => {
 						if (res.data.success) {
-							
-							this.cartList = res.data.result;
+							console.log("res.data.result.records",res.data.result.records);
+							let list = res.data.result.records;
+							let cartList = list.map(item=>{
+								item.checked = true;
+								return item;
+							});
+							this.cartList = cartList;
+							this.calcTotal();  //计算总价
 						}
 					}
 				});
 				
-				// let list = await this.$api.json('cartList'); 
-				// let cartList = list.map(item=>{
-				// 	item.checked = true;
-				// 	return item;
-				// });
-				// this.cartList = cartList;
-				// this.calcTotal();  //计算总价
+				
 			},
 			getAvatarView(imgUrl){
-				return this.viewImgUrl + imgUrl;
+				return this.viewImgUrl + '/sys/common/view/' + imgUrl;
 			},
 			//监听image加载完成
 			onImageLoad(key, index) {
@@ -162,13 +168,9 @@
 			},
 			//监听image加载失败
 			onImageError(key, index) {
-				this[key][index].image = '/static/errorImage.jpg';
+				this[key][index].viewImage = '/static/errorImage.jpg';
 			},
-			navToLogin(){
-				// uni.navigateTo({
-				// 	url: '/pages/public/login'
-				// })
-				
+			navToLogin(){				
 				uni.navigateTo({
 					url: '/pages/public/wxLogin'
 				})
@@ -189,30 +191,53 @@
 			},
 			//数量
 			numberChange(data){
-				this.cartList[data.index].buyNum = data.buyNum;
+				this.cartList[data.index].buyNum = data.number;
 				this.calcTotal();
 			},
 			//删除
 			deleteCartItem(index){
-				let list = this.cartList;
-				let row = list[index];
-				let id = row.id;
-
-				this.cartList.splice(index, 1);
-				this.calcTotal();
-				uni.hideLoading();
-			},
-			//清空
-			clearCart(){
-				uni.showModal({
-					content: '清空购物车？',
-					success: (e)=>{
-						if(e.confirm){
-							this.cartList = [];
+				let id = this.cartList[index].id;
+				let WX_TOKEN = '';
+				try {
+					const token = uni.getStorageSync('WX_TOKEN');
+					if (token) {
+						WX_TOKEN = token;
+					}
+				} catch (e) {}
+				console.log("id",id);
+				
+				
+				uni.request({
+					url: this.baseUrl + '/shopping/car/delete',
+					data: {
+						id: id,
+					},
+					method: 'POST',
+					header: {
+						'content-type': 'application/json',
+						'X-Access-Token': WX_TOKEN,
+					},
+					success: (res) => {
+						if (res.data.success) {
+							this.cartList.splice(index, 1);
+							this.calcTotal();
+							uni.hideLoading();
 						}
 					}
-				})
+				});
+				
 			},
+			//清空
+			// clearCart(){
+			// 	uni.showModal({
+			// 		content: '清空购物车？',
+			// 		success: (e)=>{
+			// 			if(e.confirm){
+			// 				this.cartList = [];
+			// 			}
+			// 		}
+			// 	})
+			// },
 			//计算总价
 			calcTotal(){
 				let list = this.cartList;
@@ -224,7 +249,7 @@
 				let checked = true;
 				list.forEach(item=>{
 					if(item.checked === true){
-						total += item.price * item.number;
+						total += item.price * item.buyNum;
 					}else if(checked === true){
 						checked = false;
 					}
@@ -240,7 +265,7 @@
 					if(item.checked){
 						goodsData.push({
 							attr_val: item.attr_val,
-							number: item.number
+							number: item.buyNum
 						})
 					}
 				})
@@ -336,6 +361,7 @@
 			.price{
 				height: 50upx;
 				line-height:50upx;
+				color: $uni-color-primary;
 			}
 		}
 		.del-btn{
@@ -352,7 +378,7 @@
 		/* #endif */
 		position:fixed;
 		left: 30upx;
-		bottom:30upx;
+		bottom:8upx;
 		z-index: 95;
 		display: flex;
 		align-items: center;
@@ -400,7 +426,7 @@
 			padding-right: 40upx;
 			.price{
 				font-size: $font-lg;
-				color: $font-color-dark;
+				color: $uni-color-primary;
 			}
 			.coupon{
 				font-size: $font-sm;
