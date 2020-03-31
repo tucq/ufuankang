@@ -21,7 +21,7 @@
 						:class="{'b-b': index!==cartList.length-1}"
 					>
 						<view class="image-wrapper">
-							<image :src="item.image" 
+							<image :src="getAvatarView(item.viewImage)"
 								:class="[item.loaded]"
 								mode="aspectFill" 
 								lazy-load 
@@ -35,16 +35,16 @@
 							></view>
 						</view>
 						<view class="item-right">
-							<text class="clamp title">{{item.title}}</text>
-							<text class="attr">{{item.attr_val}}</text>
+							<text class="clamp title">{{item.productName}}</text>
+							<text class="attr">{{item.specsName}}</text>
 							<text class="price">¥{{item.price}}</text>
 							<uni-number-box 
 								class="step"
 								:min="1" 
 								:max="item.stock"
-								:value="item.number>item.stock?item.stock:item.number"
-								:isMax="item.number>=item.stock?true:false"
-								:isMin="item.number===1"
+								:value="item.buyNum>item.stock?item.stock:item.buyNum"
+								:isMax="item.buyNum>=item.stock?true:false"
+								:isMin="item.buyNum===1"
 								:index="index"
 								@eventChange="numberChange"
 							></uni-number-box>
@@ -90,6 +90,7 @@
 		},
 		data() {
 			return {
+				viewImgUrl: this.baseUrl + '/sys/common/view/',
 				total: 0, //总价格
 				allChecked: false, //全选状态  true|false
 				empty: false, //空白页现实  true|false
@@ -115,13 +116,45 @@
 		methods: {
 			//请求数据
 			async loadData(){
-				let list = await this.$api.json('cartList'); 
-				let cartList = list.map(item=>{
-					item.checked = true;
-					return item;
+				let WX_TOKEN = '';
+				let userId = '';
+				try {
+				    const userInfo = uni.getStorageSync('userInfo');
+				    if (userInfo.id) {
+						userId = userInfo.id;
+				    }
+					const token = uni.getStorageSync('WX_TOKEN');
+					if (token) {
+						WX_TOKEN = token;
+					}
+				} catch (e) {}
+				
+				uni.request({
+					url: this.baseUrl + '/shopping/car/list',
+					data: {
+						userId: userId,
+					},
+					header: {
+						'X-Access-Token': WX_TOKEN,
+					},
+					success: (res) => {
+						if (res.data.success) {
+							
+							this.cartList = res.data.result;
+						}
+					}
 				});
-				this.cartList = cartList;
-				this.calcTotal();  //计算总价
+				
+				// let list = await this.$api.json('cartList'); 
+				// let cartList = list.map(item=>{
+				// 	item.checked = true;
+				// 	return item;
+				// });
+				// this.cartList = cartList;
+				// this.calcTotal();  //计算总价
+			},
+			getAvatarView(imgUrl){
+				return this.viewImgUrl + imgUrl;
 			},
 			//监听image加载完成
 			onImageLoad(key, index) {
@@ -156,7 +189,7 @@
 			},
 			//数量
 			numberChange(data){
-				this.cartList[data.index].number = data.number;
+				this.cartList[data.index].buyNum = data.buyNum;
 				this.calcTotal();
 			},
 			//删除
