@@ -51,7 +51,7 @@
 						   success: function(infoRes) {
 							   let code = loginRes.code;
 							   uni.request({
-								   url: 'http://localhost:30221/jeecg-boot/sys/getOpenid',
+								   url: that.$baseUrl + '/sys/getOpenid',
 								   data: {
 									   code: code,
 									   encryptedData: infoRes.encryptedData,

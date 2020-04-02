@@ -7,7 +7,7 @@
 				@click="navToDetailPage(item)"
 			>
 				<view class="image-wrapper">
-					<image :src="'http://localhost:30221/jeecg-boot/sys/common/view/' + item.viewImage" mode="aspectFill"></image>
+					<image :src="getAvatarView(item.viewImage)" mode="aspectFill"></image>
 				</view>
 				<text class="title clamp">{{item.name}}</text>
 				<text class="pro-list-desc">{{item.description}}</text>
@@ -92,7 +92,7 @@
 					}
 				}
 				uni.request({
-					url: this.baseUrl + '/api/home/ads/product',
+					url: this.$baseUrl + '/api/home/ads/product',
 					data: {
 						adsId: this.adsId,
 						pageNo: this.pageNo,
@@ -107,6 +107,9 @@
 						}
 					}
 				});
+			},
+			getAvatarView(imgUrl){
+			    return this.$baseUrl + '/sys/common/view/' + imgUrl;
 			},
 			//详情
 			navToDetailPage(item){

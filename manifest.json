@@ -59,13 +59,11 @@
         "appid" : "wxe9e09343d62da01f",
         "setting" : {
             "urlCheck" : true,
-            "minified" : false
+            "minified" : false,
+            "es6" : true,
+            "postcss" : true
         },
-        "permission" : {
-            "scope.userLocation" : {
-                "desc" : ""
-            }
-        }
+        "permission" : {}
     },
     "h5" : {
         "devServer" : {

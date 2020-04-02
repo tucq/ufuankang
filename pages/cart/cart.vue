@@ -25,7 +25,7 @@
 								:class="[item.loaded]"
 								mode="aspectFill" 
 								lazy-load 
-								@load="onImageLoad('cartList', index)" 
+								@load="onImageLoad('cartList', index)"
 								@error="onImageError('cartList', index)"
 							></image>
 							<view 
@@ -90,7 +90,6 @@
 		},
 		data() {
 			return {
-				viewImgUrl: this.baseUrl,
 				total: 0, //总价格
 				allChecked: false, //全选状态  true|false
 				empty: false, //空白页现实  true|false
@@ -132,9 +131,9 @@
 						WX_TOKEN = token;
 					}
 				} catch (e) {}
-				
+				// this.cartList = [];
 				uni.request({
-					url: this.baseUrl + '/shopping/car/list',
+					url: this.$baseUrl + '/shopping/car/list',
 					data: {
 						userId: userId,
 						pageNo: 1,
@@ -145,7 +144,6 @@
 					},
 					success: (res) => {
 						if (res.data.success) {
-							console.log("res.data.result.records",res.data.result.records);
 							let list = res.data.result.records;
 							let cartList = list.map(item=>{
 								item.checked = true;
@@ -153,6 +151,11 @@
 							});
 							this.cartList = cartList;
 							this.calcTotal();  //计算总价
+						}else{
+							//token 重新授权登录
+							uni.navigateTo({
+								url: '/pages/public/wxLogin'
+							})
 						}
 					}
 				});
@@ -160,7 +163,7 @@
 				
 			},
 			getAvatarView(imgUrl){
-				return this.viewImgUrl + '/sys/common/view/' + imgUrl;
+				return this.$baseUrl + '/sys/common/view/' + imgUrl;
 			},
 			//监听image加载完成
 			onImageLoad(key, index) {
@@ -168,7 +171,7 @@
 			},
 			//监听image加载失败
 			onImageError(key, index) {
-				this[key][index].viewImage = '/static/errorImage.jpg';
+				// this[key][index].viewImage = '/static/errorImage.jpg';
 			},
 			navToLogin(){				
 				uni.navigateTo({
@@ -204,11 +207,9 @@
 						WX_TOKEN = token;
 					}
 				} catch (e) {}
-				console.log("id",id);
-				
 				
 				uni.request({
-					url: this.baseUrl + '/shopping/car/delete',
+					url: this.$baseUrl + '/shopping/car/delete',
 					data: {
 						id: id,
 					},

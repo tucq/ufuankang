@@ -104,7 +104,7 @@
 				
 				let that = this;
 				uni.request({
-				   url: that.baseUrl + '/usr/address/' + that.manageType,
+				   url: that.$baseUrl + '/usr/address/' + that.manageType,
 				   data: {
 					   id: data.id,
 					   userId: userId,

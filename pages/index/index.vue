@@ -15,7 +15,7 @@
 			<view class="titleNview-background" :style="{backgroundColor:titleNViewBackground}"></view>
 			<swiper class="carousel" circular @change="swiperChange">
 				<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @click="navToDetailPage(item)">
-					<image :src="'http://localhost:30221/jeecg-boot/sys/common/view/' + item.imgUrl" />
+					<image :src="getAvatarView(item.imgUrl)" />
 				</swiper-item>
 			</swiper>
 			<!-- 自定义swiper指示器 -->
@@ -29,7 +29,7 @@
 		<view v-if="typeList.length > 0">
 			<view class="cate-section">
 				<view class="cate-item" v-for="(item, index) in typeList" :key="index" @click="navToDetailPage(item)">
-					<image :src="'http://localhost:30221/jeecg-boot/sys/common/view/' + item.imgUrl"></image>
+					<image :src="getAvatarView(item.imgUrl)"></image>
 					<text>{{item.adsName}}</text>
 				</view>
 			</view>
@@ -37,8 +37,7 @@
 
 		<view v-if="insertList.length > 0">
 			<view class="ad-1">
-				<!-- <image src="/static/temp/ad1.jpg" mode="scaleToFill"></image> -->
-				<image :src="'http://localhost:30221/jeecg-boot/sys/common/view/' + insertList[0].imgUrl" mode="scaleToFill" @click="navToDetailPage(insertList[0])"></image>
+				<image :src="getAvatarView(insertList[0].imgUrl)" mode="scaleToFill" @click="navToDetailPage(insertList[0])"></image>
 			</view>
 		</view>
 
@@ -56,7 +55,7 @@
 		<view class="guess-section">
 			<view v-for="(item, index) in productList" :key="index" class="guess-item" @click="navToDetailPage(item)">
 				<view class="image-wrapper">
-					<image :src="'http://localhost:30221/jeecg-boot/sys/common/view/' + item.viewImage" mode="aspectFill"></image>
+					<image :src="getAvatarView(item.viewImage)" mode="aspectFill"></image>
 				</view>
 				<text class="title clamp">{{item.name}}</text>
 				<text class="pro-list-desc">{{item.description}}</text>
@@ -82,6 +81,7 @@
 		},
 		data() {
 			return {
+				thatBaseUrl: this.$baseUrll,
 				titleNViewBackground: '',
 				swiperCurrent: 0,
 				swiperLength: 0,
@@ -106,7 +106,7 @@
 			async loadData() {
 				this.pageNo = 1;
 				uni.request({
-					url: this.baseUrl + '/api/home/list',
+					url: this.$baseUrl + '/api/home/list',
 					data: {
 						pageNo: this.pageNo,
 						pageSize: this.pageSize,
@@ -133,7 +133,7 @@
 				this.loadingType = 'loading';
 				this.pageNo ++;
 				uni.request({
-					url: this.baseUrl + '/api/home/random/product',
+					url: this.$baseUrl + '/api/home/random/product',
 					data: {
 						pageNo: this.pageNo,
 						pageSize: this.pageSize,
@@ -141,13 +141,15 @@
 					header: {},
 					success: (res) => {
 						if (res.data.success) {
-							console.log("res.data.result.total",res.data.result.total);
 							this.productList = this.productList.concat(res.data.result.records);
 							this.totalCount = res.data.result.total
 							this.loadingType  = this.productList.length + 1 > this.totalCount ? 'nomore' : 'more';
 						}
 					}
 				});
+			},
+			getAvatarView(imgUrl){
+			    return this.$baseUrl + '/sys/common/view/' + imgUrl;
 			},
 			//轮播图切换修改背景色
 			swiperChange(e) {

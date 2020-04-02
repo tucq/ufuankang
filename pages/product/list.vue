@@ -22,7 +22,7 @@
 				@click="navToDetailPage(item)"
 			>
 				<view class="image-wrapper">
-					<image :src="'http://localhost:30221/jeecg-boot/sys/common/view/' + item.viewImage" mode="aspectFill"></image>
+					<image :src="getAvatarView(item.viewImage)" mode="aspectFill"></image>
 				</view>
 				<text class="title clamp">{{item.name}}</text>
 				<text class="pro-list-desc">{{item.description}}</text>
@@ -102,7 +102,7 @@
 				}
 				
 				uni.request({
-					url: this.baseUrl + '/api/category/product/list',
+					url: this.$baseUrl + '/api/category/product/list',
 					data: {
 						categoryId: this.categoryId,
 						orderByValue: this.orderByValue,
@@ -153,7 +153,9 @@
 					title: '正在加载'
 				})
 			},
-			
+			getAvatarView(imgUrl){
+			    return this.$baseUrl + '/sys/common/view/' + imgUrl;
+			},
 			//详情
 			navToDetailPage(item){
 				//测试数据没有写id，用title代替

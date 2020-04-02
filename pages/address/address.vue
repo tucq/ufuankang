@@ -41,7 +41,7 @@
 				} catch (e) {}
 				
 				uni.request({
-					url: this.baseUrl + '/usr/address/list',
+					url: this.$baseUrl + '/usr/address/list',
 					data: {
 						userId: userId,
 						pageNo: 1,

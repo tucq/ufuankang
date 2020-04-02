@@ -85,7 +85,7 @@
             
                         //2.将用户登录code传递到后台置换用户SessionKey、OpenId等信息
                         uni.request({
-                            url: this.baseUrl + '/sys/getOpenid',
+                            url: this.$baseUrl + '/sys/getOpenid',
                             data: {
                                 code: code,
                             },

@@ -10,7 +10,7 @@
 				<text class="s-item">{{item.name}}</text>
 				<view class="t-list">
 					<view @click="navToList(titem.id)" v-if="titem.pid === item.id" class="t-item" v-for="titem in tlist" :key="titem.id">
-						<image :src="'http://localhost:30221/jeecg-boot/sys/common/view/' + titem.image"></image>
+						<image :src="getAvatarView(titem.image)"></image>
 						<text>{{titem.name}}</text>
 					</view>
 				</view>
@@ -37,7 +37,7 @@
 		methods: {
 			async loadData(){
 				uni.request({
-					url: this.baseUrl + '/api/category/list',
+					url: this.$baseUrl + '/api/category/list',
 					data: {},
 					header: {},
 					success: (res) => {
@@ -55,8 +55,9 @@
 						}
 					}
 				});
-				
-				
+			},
+			getAvatarView(imgUrl){
+			    return this.$baseUrl + '/sys/common/view/' + imgUrl;
 			},
 			//一级分类点击
 			tabtap(item){
