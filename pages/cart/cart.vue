@@ -37,7 +37,7 @@
 						<view class="item-right">
 							<text class="clamp title">{{item.productName}}</text>
 							<text class="attr">{{item.specsName}}</text>
-							<text class="price">{{item.buyNum}}¥{{item.price}}</text>
+							<text class="price">¥{{item.price}}</text>
 							<uni-number-box 
 								class="step"
 								:min="1" 
@@ -131,7 +131,7 @@
 						WX_TOKEN = token;
 					}
 				} catch (e) {}
-				// this.cartList = [];
+				this.cartList = [];
 				uni.request({
 					url: this.$baseUrl + '/shopping/car/list',
 					data: {
@@ -276,7 +276,6 @@
 						goodsData: goodsData
 					})}`
 				})
-				this.$api.msg('跳转下一页 sendData');
 			}
 		}
 	}

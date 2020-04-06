@@ -4,16 +4,12 @@
 			<swiper indicator-dots circular=true duration="400">
 				<swiper-item class="swiper-item" v-for="(item,index) in imgList" :key="index">
 					<view class="image-wrapper">
-						<image
-							:src="getAvatarView(item)"
-							class="loaded" 
-							mode="aspectFill"
-						></image>
+						<image :src="getAvatarView(item)" class="loaded" mode="aspectFill"></image>
 					</view>
 				</swiper-item>
 			</swiper>
 		</view>
-		
+
 		<view class="introduce-section">
 			<view class="uni-flex uni-row">
 				<view><text class="title">{{productInfo.name}}</text></view>
@@ -31,7 +27,7 @@
 				<!-- <text>浏览量: 768</text> -->
 			</view>
 		</view>
-		
+
 		<view class="c-list">
 			<view class="c-row b-b" @click="toggleSpec">
 				<text class="tit">购买类型</text>
@@ -45,7 +41,7 @@
 				</view>
 				<text class="yticon icon-you"></text>
 			</view>
-			
+
 			<view class="c-row b-b">
 				<text class="tit">服务</text>
 				<view class="bz-list con">
@@ -53,7 +49,7 @@
 				</view>
 			</view>
 		</view>
-		
+
 		<view class="detail-desc">
 			<view class="d-header">
 				<text>图文详情</text>
@@ -61,9 +57,9 @@
 			<div style="width:100%" v-for="(item,index) in detailImgList" :key="index">
 				<img style="width:100%;display:block;" :src="getAvatarView(item)" />
 			</div>
-			
+
 		</view>
-		
+
 		<!-- 底部操作菜单 -->
 		<view class="page-bottom">
 			<navigator url="/pages/index/index" open-type="switchTab" class="p-b-btn">
@@ -78,21 +74,16 @@
 				<text class="yticon icon-shoucang"></text>
 				<text>收藏</text>
 			</view> -->
-			
+
 			<view class="action-btn-group">
 				<button type="primary" class=" action-btn no-border add-cart-btn" @click="addCar">加入购物车</button>
 				<button type="primary" class=" action-btn no-border buy-now-btn" @click="buy">立即购买</button>
 			</view>
 		</view>
-		
-		
+
+
 		<!-- 规格-模态层弹窗 -->
-		<view 
-			class="popup spec" 
-			:class="specClass"
-			@touchmove.stop.prevent="stopPrevent"
-			@click="toggleSpec"
-		>
+		<view class="popup spec" :class="specClass" @touchmove.stop.prevent="stopPrevent" @click="toggleSpec">
 			<!-- 遮罩层 -->
 			<view class="mask"></view>
 			<view class="layer attr-content" @click.stop="stopPrevent">
@@ -114,16 +105,11 @@
 						</view>
 					</view>
 				</view>
-				
+
 				<view class="attr-list" v-if="specsTitleList.length > 0">
 					<text>{{specsTitleList[0].specsTitle}}</text>
 					<view class="item-list">
-						<text 
-							v-for="(item, index) in specsOneList" 
-							:key="item.id" class="tit"
-							:class="{selected: item.selected}"
-							@click="selectSpec(index, item.id,1)"
-						>
+						<text v-for="(item, index) in specsOneList" :key="item.id" class="tit" :class="{selected: item.selected}" @click="selectSpec(index, item.id,1)">
 							{{item.specsTitle}}
 						</text>
 					</view>
@@ -131,38 +117,28 @@
 				<view class="attr-list" v-if="specsTitleList.length > 1">
 					<text>{{specsTitleList[1].specsTitle}}</text>
 					<view class="item-list">
-						<text 
-							v-for="(item, index) in specsTwoList" 
-							:key="item.id" class="tit"
-							:class="{selected: item.selected}"
-							@click="selectSpec(index, item.id,2)"
-						>
+						<text v-for="(item, index) in specsTwoList" :key="item.id" class="tit" :class="{selected: item.selected}" @click="selectSpec(index, item.id,2)">
 							{{item.specsTitle}}
 						</text>
 					</view>
 				</view>
-				
+
 				<view class="attr-list">
 					<text>数量</text>
-					<uni-number-box class="step"
-						 :min="1" 
-						 :max="priceSelected.stock"
-						 :value="1"
-						 @eventChange="numberChange">
-					 </uni-number-box>
+					<uni-number-box class="step" :min="1" :max="priceSelected.stock" :value="1" @eventChange="numberChange">
+					</uni-number-box>
 				</view>
 				<button class="btn" @click="toggleSpec">完成</button>
 			</view>
 		</view>
-		
+
 	</view>
 </template>
 
 <script>
-	
 	import uniNumberBox from '@/components/uni-number-box.vue'
-	
-	export default{
+
+	export default {
 		components: {
 			uniNumberBox
 		},
@@ -181,88 +157,89 @@
 				favorite: false,
 			};
 		},
-		async onLoad(options){
+		async onLoad(options) {
 			let productId = options.productId;
 			uni.request({
-				url: this.$baseUrl + '/api/product/'+productId,
+				url: this.$baseUrl + '/api/product/' + productId,
 				data: {},
 				header: {},
 				success: (res) => {
 					if (res.data.success) {
 						this.productInfo = res.data.result;
 						this.productInfo.quantity = 1;
-						this.imgList = this.productInfo.image.substring(0,this.productInfo.image.length-1).split(',');
-						this.detailImgList = this.productInfo.detailImages.substring(0,this.productInfo.detailImages.length-1).split(',');
+						this.imgList = this.productInfo.image.substring(0, this.productInfo.image.length - 1).split(',');
+						this.detailImgList = this.productInfo.detailImages.substring(0, this.productInfo.detailImages.length - 1).split(
+							',');
 						this.serviceList = this.productInfo.service.split(',');
 						this.specsTitleList = this.productInfo.specsTitleList;
 						this.specsOneList = this.productInfo.specsOneList;
 						this.specsTwoList = this.productInfo.specsTwoList;
 						this.priceList = this.productInfo.priceList;
-						
+
 						this.initDefaultPrice();
 					}
 				},
 			});
 		},
-		methods:{
+		methods: {
 			//规格弹窗开关
 			toggleSpec() {
-				if(this.specClass === 'show'){
+				if (this.specClass === 'show') {
 					this.specClass = 'hide';
 					setTimeout(() => {
 						this.specClass = 'none';
 					}, 250);
-				}else if(this.specClass === 'none'){
+				} else if (this.specClass === 'none') {
 					this.specClass = 'show';
 				}
 			},
-			initDefaultPrice(){
-				for(let i=0;i<this.priceList.length;i++){
+			initDefaultPrice() {
+				for (let i = 0; i < this.priceList.length; i++) {
 					let pitem = this.priceList[i];
-					if(pitem.defaultFlag === '0'){
+					if (pitem.defaultFlag === '0') {
 						let specs1Id = pitem.specs1Id;
-						for(let j=0;j<this.specsOneList.length;j++){
-							if(specs1Id === this.specsOneList[j].id){
-								this.selectSpec(j, specs1Id,1);
+						for (let j = 0; j < this.specsOneList.length; j++) {
+							if (specs1Id === this.specsOneList[j].id) {
+								this.selectSpec(j, specs1Id, 1);
 								break;
 							}
 						}
-						if(this.specsTitleList.length > 1){
+						if (this.specsTitleList.length > 1) {
 							let specs2Id = pitem.specs2Id;
-							for(let k=0;k<this.specsTwoList.length;k++){
-								if(specs2Id === this.specsTwoList[k].id){
-									this.selectSpec(k, specs2Id,2);
+							for (let k = 0; k < this.specsTwoList.length; k++) {
+								if (specs2Id === this.specsTwoList[k].id) {
+									this.selectSpec(k, specs2Id, 2);
 									break;
 								}
 							}
 						}
-						
+
 						break;
 					}
 				}
 			},
 			//选择规格
-			selectSpec(index, id,type){
+			selectSpec(index, id, type) {
 				let specList = [];
-				if(type === 1){
+				if (type === 1) {
 					specList = this.specsOneList;
 					this.priceSelected.specs1Id = this.specsOneList[index].id;
-				}else{
+				} else {
 					specList = this.specsTwoList;
 					this.priceSelected.specs2Id = this.specsTwoList[index].id;
 				}
-				
-				specList.forEach(item=>{
-					if(item.id != id){
+
+				specList.forEach(item => {
+					if (item.id != id) {
 						this.$set(item, 'selected', false);
 					}
 				})
-				
+
 				this.$set(specList[index], 'selected', true);
-				
-				for(let i=0;i<this.priceList.length;i++){
+
+				for (let i = 0; i < this.priceList.length; i++) {
 					let item = this.priceList[i];
-					if(item.specs1Id == this.priceSelected.specs1Id && item.specs2Id == this.priceSelected.specs2Id){
+					if (item.specs1Id == this.priceSelected.specs1Id && item.specs2Id == this.priceSelected.specs2Id) {
 						this.priceSelected.specs1Id = item.specs1Id;
 						this.priceSelected.specs2Id = item.specs2Id;
 						this.priceSelected.price = item.price;
@@ -273,25 +250,25 @@
 						break;
 					}
 				}
-				
+
 			},
-			numberChange(data){
+			numberChange(data) {
 				this.productInfo.quantity = data.number;
 			},
-			addCar(){
+			addCar() {
 				let WX_TOKEN = '';
 				let userId = '';
 				try {
-				    const userInfo = uni.getStorageSync('userInfo');
-				    if (userInfo.id) {
+					const userInfo = uni.getStorageSync('userInfo');
+					if (userInfo.id) {
 						userId = userInfo.id;
-				    }
+					}
 					const token = uni.getStorageSync('WX_TOKEN');
 					if (token) {
 						WX_TOKEN = token;
 					}
 				} catch (e) {}
-				
+
 				uni.request({
 					url: this.$baseUrl + '/shopping/car/add',
 					data: {
@@ -303,8 +280,8 @@
 					},
 					method: 'POST',
 					header: {
-					   'content-type': 'application/json',
-					   'X-Access-Token': WX_TOKEN,
+						'content-type': 'application/json',
+						'X-Access-Token': WX_TOKEN,
 					},
 					success: (res) => {
 						if (res.data.success) {
@@ -313,89 +290,104 @@
 								mask: true,
 								duration: 1500
 							});
+						}else{
+							uni.navigateTo({
+								url: '/pages/public/wxLogin'
+							})
 						}
 					},
+					
 				});
 			},
-			getAvatarView(imgUrl){
-			    return this.$baseUrl + '/sys/common/view/' + imgUrl;
+			getAvatarView(imgUrl) {
+				return this.$baseUrl + '/sys/common/view/' + imgUrl;
 			},
 			//收藏
 			// toFavorite(){
 			// 	this.favorite = !this.favorite;
 			// },
-			buy(){
+			buy() {
 				uni.navigateTo({
 					url: `/pages/order/createOrder`
 				})
 			},
-			stopPrevent(){}
+			stopPrevent() {}
 		},
 
 	}
 </script>
 
 <style lang='scss'>
-	page{
+	page {
 		background: $page-color-base;
 		padding-bottom: 160upx;
 	}
-	.icon-you{
+
+	.icon-you {
 		font-size: $font-base + 2upx;
 		color: #888;
 	}
+
 	.carousel {
 		height: 722upx;
-		position:relative;
-		swiper{
+		position: relative;
+
+		swiper {
 			height: 100%;
 		}
-		.image-wrapper{
+
+		.image-wrapper {
 			width: 100%;
 			height: 100%;
 		}
+
 		.swiper-item {
 			display: flex;
 			justify-content: center;
 			align-content: center;
 			height: 750upx;
 			overflow: hidden;
+
 			image {
 				width: 100%;
 				height: 100%;
 			}
 		}
-		
+
 	}
-	
+
 	/* 标题简介 */
-	.introduce-section{
+	.introduce-section {
 		background: #fff;
 		padding: 20upx 30upx;
-		
-		.title{
+
+		.title {
 			font-size: 32upx;
 			color: $font-color-dark;
 			height: 50upx;
 			line-height: 50upx;
 		}
-		.price-box{
-			display:flex;
-			align-items:baseline;
+
+		.price-box {
+			display: flex;
+			align-items: baseline;
 			height: 64upx;
 			padding: 10upx 0;
 			font-size: 26upx;
-			color:$uni-color-primary;
+			color: $uni-color-primary;
 		}
-		.price{
+
+		.price {
 			font-size: $font-lg + 2upx;
 		}
-		.m-price{
-			margin:0 12upx;
+
+		.m-price {
+			margin: 0 12upx;
 			color: $font-color-light;
 			text-decoration: line-through;
 		}
-		.coupon-tip{
+
+		.coupon-tip {
 			align-items: center;
 			padding: 4upx 10upx;
 			background: $uni-color-primary;
@@ -403,51 +395,57 @@
 			color: #fff;
 			border-radius: 6upx;
 			line-height: 1;
-			transform: translateY(-4upx); 
+			transform: translateY(-4upx);
 		}
-		.bot-row{
-			display:flex;
-			align-items:center;
+
+		.bot-row {
+			display: flex;
+			align-items: center;
 			height: 50upx;
 			font-size: $font-sm;
 			color: $font-color-light;
-			text{
+
+			text {
 				flex: 1;
 			}
 		}
 	}
+
 	/* 分享 */
-	.share-section{
-		display:flex;
-		align-items:center;
+	.share-section {
+		display: flex;
+		align-items: center;
 		color: $font-color-base;
 		background: linear-gradient(left, #fdf5f6, #fbebf6);
 		padding: 12upx 30upx;
-		.share-icon{
-			display:flex;
-			align-items:center;
+
+		.share-icon {
+			display: flex;
+			align-items: center;
 			width: 70upx;
 			height: 30upx;
 			line-height: 1;
 			border: 1px solid $uni-color-primary;
 			border-radius: 4upx;
-			position:relative;
+			position: relative;
 			overflow: hidden;
 			font-size: 22upx;
 			color: $uni-color-primary;
-			&:after{
+
+			&:after {
 				content: '';
 				width: 50upx;
 				height: 50upx;
 				border-radius: 50%;
 				left: -20upx;
 				top: -12upx;
-				position:absolute;
+				position: absolute;
 				background: $uni-color-primary;
 			}
 		}
-		.icon-xingxing{
-			position:relative;
+
+		.icon-xingxing {
+			position: relative;
 			z-index: 1;
 			font-size: 24upx;
 			margin-left: 2upx;
@@ -455,130 +453,153 @@
 			color: #fff;
 			line-height: 1;
 		}
-		.tit{
+
+		.tit {
 			font-size: $font-base;
-			margin-left:10upx;
+			margin-left: 10upx;
 		}
-		.icon-bangzhu1{
+
+		.icon-bangzhu1 {
 			padding: 10upx;
 			font-size: 30upx;
 			line-height: 1;
 		}
-		.share-btn{
+
+		.share-btn {
 			flex: 1;
-			text-align:right;
+			text-align: right;
 			font-size: $font-sm;
 			color: $uni-color-primary;
 		}
-		.icon-you{
+
+		.icon-you {
 			font-size: $font-sm;
 			margin-left: 4upx;
 			color: $uni-color-primary;
 		}
 	}
-	
-	.c-list{
+
+	.c-list {
 		font-size: $font-sm + 2upx;
 		color: $font-color-base;
 		background: #fff;
-		.c-row{
-			display:flex;
-			align-items:center;
+
+		.c-row {
+			display: flex;
+			align-items: center;
 			padding: 20upx 30upx;
-			position:relative;
+			position: relative;
 		}
-		.tit{
+
+		.tit {
 			width: 140upx;
 		}
-		.con{
+
+		.con {
 			flex: 1;
 			color: $font-color-dark;
-			.selected-text{
+
+			.selected-text {
 				margin-right: 10upx;
 			}
 		}
-		.bz-list{
+
+		.bz-list {
 			height: 40upx;
 			font-size: $font-sm+2upx;
 			color: $font-color-dark;
-			text{
+
+			text {
 				display: inline-block;
 				margin-right: 30upx;
 			}
 		}
-		.con-list{
+
+		.con-list {
 			flex: 1;
-			display:flex;
+			display: flex;
 			flex-direction: column;
 			color: $font-color-dark;
 			line-height: 40upx;
 		}
-		.red{
+
+		.red {
 			color: $uni-color-primary;
 		}
 	}
-	
+
 	/* 评价 */
-	.eva-section{
+	.eva-section {
 		display: flex;
 		flex-direction: column;
 		padding: 20upx 30upx;
 		background: #fff;
 		margin-top: 16upx;
-		.e-header{
+
+		.e-header {
 			display: flex;
 			align-items: center;
 			height: 70upx;
 			font-size: $font-sm + 2upx;
 			color: $font-color-light;
-			.tit{
+
+			.tit {
 				font-size: $font-base + 2upx;
 				color: $font-color-dark;
 				margin-right: 4upx;
 			}
-			.tip{
+
+			.tip {
 				flex: 1;
 				text-align: right;
 			}
-			.icon-you{
+
+			.icon-you {
 				margin-left: 10upx;
 			}
 		}
 	}
-	.eva-box{
+
+	.eva-box {
 		display: flex;
 		padding: 20upx 0;
-		.portrait{
+
+		.portrait {
 			flex-shrink: 0;
 			width: 80upx;
 			height: 80upx;
 			border-radius: 100px;
 		}
-		.right{
+
+		.right {
 			flex: 1;
 			display: flex;
 			flex-direction: column;
 			font-size: $font-base;
 			color: $font-color-base;
 			padding-left: 26upx;
-			.con{
+
+			.con {
 				font-size: $font-base;
 				color: $font-color-dark;
 				padding: 20upx 0;
 			}
-			.bot{
+
+			.bot {
 				display: flex;
 				justify-content: space-between;
 				font-size: $font-sm;
-				color:$font-color-light;
+				color: $font-color-light;
 			}
 		}
 	}
+
 	/*  详情 */
-	.detail-desc{
+	.detail-desc {
 		background: #fff;
 		margin-top: 16upx;
-		.d-header{
+
+		.d-header {
 			display: flex;
 			justify-content: center;
 			align-items: center;
@@ -586,14 +607,15 @@
 			font-size: $font-base + 2upx;
 			color: $font-color-dark;
 			position: relative;
-				
-			text{
+
+			text {
 				padding: 0 20upx;
 				background: #fff;
 				position: relative;
 				z-index: 1;
 			}
-			&:after{
+
+			&:after {
 				position: absolute;
 				left: 50%;
 				top: 50%;
@@ -601,46 +623,54 @@
 				width: 300upx;
 				height: 0;
 				content: '';
-				border-bottom: 1px solid #ccc; 
+				border-bottom: 1px solid #ccc;
 			}
 		}
 	}
-	
+
 	/* 规格选择弹窗 */
-	.attr-content{
+	.attr-content {
 		padding: 10upx 30upx;
-		.a-t{
+
+		.a-t {
 			display: flex;
-			image{
+
+			image {
 				width: 170upx;
 				height: 170upx;
 				flex-shrink: 0;
 				margin-top: -40upx;
-				border-radius: 8upx;;
+				border-radius: 8upx;
+				;
 			}
-			.right{
+
+			.right {
 				display: flex;
 				flex-direction: column;
 				padding-left: 24upx;
 				font-size: $font-sm + 2upx;
 				color: $font-color-base;
 				line-height: 42upx;
-				.price{
+
+				.price {
 					font-size: $font-lg;
 					color: $uni-color-primary;
 					margin-bottom: 10upx;
 				}
-				.m-price{
-					margin:0 12upx;
+
+				.m-price {
+					margin: 0 12upx;
 					color: $font-color-light;
 					text-decoration: line-through;
 				}
-				.selected-text{
+
+				.selected-text {
 					margin-right: 10upx;
 				}
 			}
 		}
-		.attr-list{
+
+		.attr-list {
 			display: flex;
 			flex-direction: column;
 			font-size: $font-base + 2upx;
@@ -648,11 +678,13 @@
 			padding-top: 30upx;
 			padding-left: 10upx;
 		}
-		.item-list{
+
+		.item-list {
 			padding: 20upx 0 0;
 			display: flex;
 			flex-wrap: wrap;
-			text{
+
+			text {
 				display: flex;
 				align-items: center;
 				justify-content: center;
@@ -666,13 +698,14 @@
 				font-size: $font-base;
 				color: $font-color-dark;
 			}
-			.selected{
+
+			.selected {
 				background: #fbebee;
 				color: $uni-color-primary;
 			}
 		}
 	}
-	
+
 	/*  弹出层 */
 	.popup {
 		position: fixed;
@@ -681,28 +714,34 @@
 		right: 0;
 		bottom: 0;
 		z-index: 99;
-		
+
 		&.show {
 			display: block;
-			.mask{
+
+			.mask {
 				animation: showPopup 0.2s linear both;
 			}
+
 			.layer {
 				animation: showLayer 0.2s linear both;
 			}
 		}
+
 		&.hide {
-			.mask{
+			.mask {
 				animation: hidePopup 0.2s linear both;
 			}
+
 			.layer {
 				animation: hideLayer 0.2s linear both;
 			}
 		}
+
 		&.none {
 			display: none;
 		}
-		.mask{
+
+		.mask {
 			position: fixed;
 			top: 0;
 			width: 100%;
@@ -710,6 +749,7 @@
 			z-index: 1;
 			background-color: rgba(0, 0, 0, 0.4);
 		}
+
 		.layer {
 			position: fixed;
 			z-index: 99;
@@ -718,7 +758,8 @@
 			min-height: 40vh;
 			border-radius: 10upx 10upx 0 0;
 			background-color: #fff;
-			.btn{
+
+			.btn {
 				height: 66upx;
 				line-height: 66upx;
 				border-radius: 100upx;
@@ -728,57 +769,65 @@
 				margin: 30upx auto 20upx;
 			}
 		}
+
 		@keyframes showPopup {
 			0% {
 				opacity: 0;
 			}
+
 			100% {
 				opacity: 1;
 			}
 		}
+
 		@keyframes hidePopup {
 			0% {
 				opacity: 1;
 			}
+
 			100% {
 				opacity: 0;
 			}
 		}
+
 		@keyframes showLayer {
 			0% {
 				transform: translateY(120%);
 			}
+
 			100% {
 				transform: translateY(0%);
 			}
 		}
+
 		@keyframes hideLayer {
 			0% {
 				transform: translateY(0);
 			}
+
 			100% {
 				transform: translateY(120%);
 			}
 		}
 	}
-	
+
 	/* 底部操作菜单 */
-	.page-bottom{
-		position:fixed;
+	.page-bottom {
+		position: fixed;
 		left: 30upx;
-		bottom:30upx;
+		bottom: 30upx;
 		z-index: 95;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		width: 690upx;
 		height: 100upx;
-		background: rgba(255,255,255,.9);
-		box-shadow: 0 0 20upx 0 rgba(0,0,0,.5);
+		background: rgba(255, 255, 255, .9);
+		box-shadow: 0 0 20upx 0 rgba(0, 0, 0, .5);
 		border-radius: 16upx;
-		
-		.p-b-btn{
-			display:flex;
+
+		.p-b-btn {
+			display: flex;
 			flex-direction: column;
 			align-items: center;
 			justify-content: center;
@@ -786,66 +835,72 @@
 			color: $font-color-base;
 			width: 96upx;
 			height: 80upx;
-			.yticon{
+
+			.yticon {
 				font-size: 40upx;
 				line-height: 48upx;
 				color: $font-color-light;
 			}
-			&.active, &.active .yticon{
+
+			&.active,
+			&.active .yticon {
 				color: $uni-color-primary;
 			}
-			.icon-fenxiang2{
+
+			.icon-fenxiang2 {
 				font-size: 42upx;
 				transform: translateY(-2upx);
 			}
-			.icon-shoucang{
+
+			.icon-shoucang {
 				font-size: 46upx;
 			}
 		}
-		.action-btn-group{
+
+		.action-btn-group {
 			display: flex;
 			height: 76upx;
 			border-radius: 100px;
 			overflow: hidden;
 			box-shadow: 0 20upx 40upx -16upx #fa436a;
 			box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
-			background: linear-gradient(to right, #ffac30,#fa436a,#F56C6C);
+			background: linear-gradient(to right, #ffac30, #fa436a, #F56C6C);
 			margin-left: 20upx;
-			position:relative;
-			&:after{
+			position: relative;
+
+			&:after {
 				content: '';
-				position:absolute;
+				position: absolute;
 				top: 50%;
 				right: 50%;
 				transform: translateY(-50%);
 				height: 28upx;
 				width: 0;
-				border-right: 1px solid rgba(255,255,255,.5);
+				border-right: 1px solid rgba(255, 255, 255, .5);
 			}
-			.action-btn{
-				display:flex;
+
+			.action-btn {
+				display: flex;
 				align-items: center;
 				justify-content: center;
 				width: 180upx;
 				height: 100%;
-				font-size: $font-base ;
+				font-size: $font-base;
 				padding: 0;
 				border-radius: 0;
 				background: transparent;
 			}
 		}
 	}
-	
+
 	.uni-numbox {
 		position: inherit !important;
 		margin-top: 20upx;
-	}	
-	
-	.description{
+	}
+
+	.description {
 		font-size: $font-sm+2upx;
 		color: $font-color-base;
 		line-height: 50upx;
 	}
-	
-	
 </style>

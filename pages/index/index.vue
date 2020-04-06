@@ -35,11 +35,12 @@
 			</view>
 		</view>
 
-		<view v-if="insertList.length > 0">
+		<view v-for="(item, index) in insertList" :key="index" >
 			<view class="ad-1">
-				<image :src="getAvatarView(insertList[0].imgUrl)" mode="scaleToFill" @click="navToDetailPage(insertList[0])"></image>
+				<image :src="getAvatarView(item.imgUrl)" mode="scaleToFill" @click="navToDetailPage(item)"></image>
 			</view>
 		</view>
+		
 
 
 		<!-- 猜你所需 -->
@@ -53,7 +54,7 @@
 		</view>
 
 		<view class="guess-section">
-			<view v-for="(item, index) in productList" :key="index" class="guess-item" @click="navToDetailPage(item)">
+			<view v-for="(item, index) in productList" :key="index" class="guess-item" @click="navToProductDetail(item)">
 				<view class="image-wrapper">
 					<image :src="getAvatarView(item.viewImage)" mode="aspectFill"></image>
 				</view>
@@ -65,19 +66,18 @@
 				</view>
 			</view>
 		</view>
-		
-		<uni-load-more :status="loadingType" ></uni-load-more>
+
+		<uni-load-more :status="loadingType"></uni-load-more>
 
 	</view>
 </template>
 
 <script>
-	
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
-	
+
 	export default {
 		components: {
-			uniLoadMore	
+			uniLoadMore
 		},
 		data() {
 			return {
@@ -96,7 +96,7 @@
 			};
 		},
 		//加载更多
-		onReachBottom(){
+		onReachBottom() {
 			this.loadDataMore();
 		},
 		onLoad() {
@@ -118,7 +118,7 @@
 							this.titleNViewBackground = carouselList[0].bgColor;
 							this.swiperLength = carouselList.length;
 							this.carouselList = carouselList;
-							
+
 							this.typeList = res.data.result.categoryList;
 							this.insertList = res.data.result.insertList;
 							this.productList = res.data.result.productList;
@@ -127,11 +127,11 @@
 				});
 			},
 			async loadDataMore() {
-				if(this.loadingType === 'nomore'){
+				if (this.loadingType === 'nomore') {
 					return;
 				}
 				this.loadingType = 'loading';
-				this.pageNo ++;
+				this.pageNo++;
 				uni.request({
 					url: this.$baseUrl + '/api/home/random/product',
 					data: {
@@ -143,13 +143,13 @@
 						if (res.data.success) {
 							this.productList = this.productList.concat(res.data.result.records);
 							this.totalCount = res.data.result.total
-							this.loadingType  = this.productList.length + 1 > this.totalCount ? 'nomore' : 'more';
+							this.loadingType = this.productList.length + 1 > this.totalCount ? 'nomore' : 'more';
 						}
 					}
 				});
 			},
-			getAvatarView(imgUrl){
-			    return this.$baseUrl + '/sys/common/view/' + imgUrl;
+			getAvatarView(imgUrl) {
+				return this.$baseUrl + '/sys/common/view/' + imgUrl;
 			},
 			//轮播图切换修改背景色
 			swiperChange(e) {
@@ -162,18 +162,23 @@
 				//测试数据没有写id，用title代替
 				let id = item.id;
 				console.log("详情页id", id);
-				if(item.isList == '0'){
+				if (item.isList == '0') {
 					uni.navigateTo({
-						url: `/pages/product/product?id=${id}`
+						url: `/pages/product/product?productId=${id}`
 					})
-				}else{
+				} else {
 					uni.navigateTo({
-						url: `/pages/ads/list?id=${id}`
+						url: `/pages/ads/list?productId=${id}`
 					})
 				}
-				
+
 			},
-			moreSellWell(){
+			navToProductDetail(item) {
+				uni.navigateTo({
+					url: `/pages/product/product?productId=${item.id}`
+				})
+			},
+			moreSellWell() {
 				this.$api.msg('点击了更多热销商品');
 			},
 		},
@@ -696,7 +701,7 @@
 			color: $uni-color-primary;
 			line-height: 1;
 		}
-		
+
 		.m-price {
 			font-size: $font-sm+2upx;
 			text-decoration: line-through;
@@ -704,6 +709,4 @@
 			margin-left: 8upx;
 		}
 	}
-	
-	
 </style>
