@@ -159,17 +159,41 @@
 			},
 			//详情页
 			navToDetailPage(item) {
-				//测试数据没有写id，用title代替
 				let id = item.id;
-				console.log("详情页id", id);
-				if (item.isList == '0') {
+				console.log("item.id",item.id);
+				if (item.isList == '1') {
+					//跳转商品列表
 					uni.navigateTo({
-						url: `/pages/product/product?productId=${id}`
+						url: `/pages/ads/list?adsId=${id}`
 					})
 				} else {
-					uni.navigateTo({
-						url: `/pages/ads/list?productId=${id}`
-					})
+					//跳转商品详情
+					uni.request({
+						url: this.$baseUrl + '/api/home/ads/product',
+						data: {
+							adsId: id,
+							pageNo: this.pageNo,
+							pageSize: 10,
+						},
+						header: {},
+						success: (res) => {
+							if (res.data.success) {
+								if(res.data.result.records.length > 0){
+									let productId = res.data.result.records[0].id;
+									uni.navigateTo({
+										url: `/pages/product/product?productId=${productId}`
+									})
+								}else{
+									uni.showToast({
+										title: "没有对应的商品信息",
+										icon: 'none',
+										duration: 1500,
+									})
+								}
+							}
+						},
+					});
+					
 				}
 
 			},

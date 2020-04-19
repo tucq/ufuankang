@@ -30,7 +30,7 @@
 							></image>
 							<view 
 								class="yticon icon-xuanzhong2 checkbox"
-								:class="{checked: item.checked}"
+								:class="{checked: item.isCheck == '0'}"
 								@click="check('item', index)"
 							></view>
 						</view>
@@ -46,6 +46,7 @@
 								:isMax="item.buyNum>=item.stock?true:false"
 								:isMin="item.buyNum===1"
 								:index="index"
+								:disabled="true"
 								@eventChange="numberChange"
 							></uni-number-box>
 						</view>
@@ -144,12 +145,7 @@
 					},
 					success: (res) => {
 						if (res.data.success) {
-							let list = res.data.result.records;
-							let cartList = list.map(item=>{
-								item.checked = true;
-								return item;
-							});
-							this.cartList = cartList;
+							this.cartList = res.data.result.records;
 							this.calcTotal();  //计算总价
 						}else{
 							//token 重新授权登录
@@ -181,20 +177,121 @@
 			 //选中状态处理
 			check(type, index){
 				if(type === 'item'){
-					this.cartList[index].checked = !this.cartList[index].checked;
+					if(this.cartList[index].isCheck == '0'){
+						this.cartList[index].isCheck = '1';
+						this.updateCheck(this.cartList[index].id,'1');
+					}else{
+						this.cartList[index].isCheck = '0';
+						this.updateCheck(this.cartList[index].id,'0');
+					}
 				}else{
-					const checked = !this.allChecked
+					let isCheck = !this.allChecked ? '0' : '1';
 					const list = this.cartList;
 					list.forEach(item=>{
-						item.checked = checked;
+						item.isCheck = isCheck;
 					})
-					this.allChecked = checked;
+					this.allChecked = !this.allChecked;
+					this.updateAllCheck(this.cartList[0].userId,isCheck);
 				}
 				this.calcTotal(type);
+			},
+			updateCheck(id,isCheck){
+				let WX_TOKEN = '';
+				try {
+					const token = uni.getStorageSync('WX_TOKEN');
+					if (token) {
+						WX_TOKEN = token;
+					}
+				} catch (e) {}
+				
+				uni.request({
+					url: this.$baseUrl + '/shopping/car/checked',
+					data: {
+						id: id,
+						isCheck:isCheck,
+					},
+					method: 'POST',
+					header: {
+						'content-type': 'application/json',
+						'X-Access-Token': WX_TOKEN,
+					},
+					success: (res) => {
+						if (res.data.success) {
+							
+						}else{
+							uni.navigateTo({
+								url: '/pages/public/wxLogin'
+							})
+						}
+					}
+				});
+			},
+			updateAllCheck(userId,isCheck){
+				let WX_TOKEN = '';
+				try {
+					const token = uni.getStorageSync('WX_TOKEN');
+					if (token) {
+						WX_TOKEN = token;
+					}
+				} catch (e) {}
+				
+				uni.request({
+					url: this.$baseUrl + '/shopping/car/allChecked',
+					data: {
+						userId: userId,
+						isCheck:isCheck,
+					},
+					method: 'POST',
+					header: {
+						'content-type': 'application/json',
+						'X-Access-Token': WX_TOKEN,
+					},
+					success: (res) => {
+						if (res.data.success) {
+							
+						}else{
+							uni.navigateTo({
+								url: '/pages/public/wxLogin'
+							})
+						}
+					}
+				});
+			},
+			updateBuyNum(id,buyNum){
+				let WX_TOKEN = '';
+				try {
+					const token = uni.getStorageSync('WX_TOKEN');
+					if (token) {
+						WX_TOKEN = token;
+					}
+				} catch (e) {}
+				
+				uni.request({
+					url: this.$baseUrl + '/shopping/car/updateBuyNum',
+					data: {
+						id: id,
+						buyNum:buyNum,
+					},
+					method: 'POST',
+					header: {
+						'content-type': 'application/json',
+						'X-Access-Token': WX_TOKEN,
+					},
+					success: (res) => {
+						if (res.data.success) {
+							
+						}else{
+							uni.navigateTo({
+								url: '/pages/public/wxLogin'
+							})
+						}
+					}
+				});
 			},
 			//数量
 			numberChange(data){
 				this.cartList[data.index].buyNum = data.number;
+				this.updateBuyNum(this.cartList[data.index].id,data.number);
 				this.calcTotal();
 			},
 			//删除
@@ -223,6 +320,10 @@
 							this.cartList.splice(index, 1);
 							this.calcTotal();
 							uni.hideLoading();
+						}else{
+							uni.navigateTo({
+								url: '/pages/public/wxLogin'
+							})
 						}
 					}
 				});
@@ -249,7 +350,7 @@
 				let total = 0;
 				let checked = true;
 				list.forEach(item=>{
-					if(item.checked === true){
+					if(item.isCheck === '0'){
 						total += item.price * item.buyNum;
 					}else if(checked === true){
 						checked = false;
@@ -263,18 +364,21 @@
 				let list = this.cartList;
 				let goodsData = [];
 				list.forEach(item=>{
-					if(item.checked){
-						goodsData.push({
-							attr_val: item.attr_val,
-							number: item.buyNum
-						})
+					if(item.isCheck === '0'){
+						goodsData.push(item);
 					}
-				})
-
+				});
+				if(goodsData.length === 0){
+					uni.showToast({
+						title: '请选择购买商品',
+						icon: 'none',
+						duration: 1500
+					});
+					return;
+				}
+				
 				uni.navigateTo({
-					url: `/pages/order/createOrder?data=${JSON.stringify({
-						goodsData: goodsData
-					})}`
+					url: `/pages/order/createOrder`
 				})
 			}
 		}

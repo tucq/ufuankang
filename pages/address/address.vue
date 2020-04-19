@@ -59,11 +59,9 @@
 			},
 			//选择地址
 			checkAddress(item){
-				if(this.source == 1){
-					//this.$api.prePage()获取上一页实例，在App.vue定义
-					this.$api.prePage().addressData = item;
-					uni.navigateBack()
-				}
+				//this.$api.prePage()获取上一页实例，在App.vue定义
+				this.$api.prePage().addressData = item;
+				uni.navigateBack()
 			},
 			addAddress(type, item){
 				if(type == 'edit'){

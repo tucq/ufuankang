@@ -46,7 +46,7 @@
 			// #ifdef H5
 			this.headerTop = document.getElementsByTagName('uni-page-head')[0].offsetHeight+'px';
 			// #endif
-			this.adsId = options.id;
+			this.adsId = options.adsId;
 			this.loadData();
 		},
 		onPageScroll(e){

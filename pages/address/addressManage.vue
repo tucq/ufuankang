@@ -22,7 +22,7 @@
 		
 		<view class="row default-row">
 			<text class="tit">设为默认</text>
-			<switch :checked="addressData.defaule" color="#fa436a" @change="switchChange" />
+			<switch :checked="addressData.defaule == '0'" color="#fa436a" @change="switchChange" />
 		</view>
 		<button class="add-btn" @click="confirm">提交</button>
 	</view>
@@ -38,7 +38,7 @@
 					addressName: '在地图选择',
 					address: '',
 					detailAddress: '',
-					defaule: false
+					defaule: '0'
 				}
 			}
 		},
@@ -56,7 +56,11 @@
 		},
 		methods: {
 			switchChange(e){
-				this.addressData.defaule = e.detail.value;
+				if(e.detail.value){
+					this.addressData.defaule = '0';
+				}else{
+					this.addressData.defaule = '1';
+				}
 			},
 			
 			//地图选择地址
@@ -112,7 +116,7 @@
 					   telephone: data.telephone,
 					   address: data.address,
 					   detailAddress: data.detailAddress,
-					   defaule: data.defaule ? '0' : '1',
+					   defaule: data.defaule,
 				   },
 				   method: that.manageType == 'add' ? 'POST' : 'PUT',
 				   header: {
