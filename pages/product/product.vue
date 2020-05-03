@@ -54,11 +54,11 @@
 			<view class="d-header">
 				<text>图文详情</text>
 			</view>
-			<div style="width:100%" v-for="(item,index) in detailImgList" :key="index">
-				<img style="width:100%;display:block;" :src="getAvatarView(item)" />
+			<div v-for="(item,index) in detailImgList" :key="index">
+				<img style="width: 100%;" :src="getAvatarView(item)" mode="widthFix" />
 			</div>
-
 		</view>
+		
 
 		<!-- 底部操作菜单 -->
 		<view class="page-bottom">
@@ -626,7 +626,10 @@
 				border-bottom: 1px solid #ccc;
 			}
 		}
+		
 	}
+	
+
 
 	/* 规格选择弹窗 */
 	.attr-content {

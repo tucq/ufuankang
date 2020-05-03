@@ -113,10 +113,9 @@
 			},
 			//详情
 			navToDetailPage(item){
-				//测试数据没有写id，用title代替
-				let id = item.title;
+				let id = item.id;
 				uni.navigateTo({
-					url: `/pages/product/product?id=${id}`
+					url: `/pages/product/product?productId=${id}`
 				})
 			},
 		},

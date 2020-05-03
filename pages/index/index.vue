@@ -161,7 +161,7 @@
 			navToDetailPage(item) {
 				let id = item.id;
 				console.log("item.id",item.id);
-				if (item.isList == '1') {
+				if (item.isList == '0') {
 					//跳转商品列表
 					uni.navigateTo({
 						url: `/pages/ads/list?adsId=${id}`
@@ -178,6 +178,7 @@
 						header: {},
 						success: (res) => {
 							if (res.data.success) {
+								console.log("res.data.result.records",res.data.result.records);
 								if(res.data.result.records.length > 0){
 									let productId = res.data.result.records[0].id;
 									uni.navigateTo({

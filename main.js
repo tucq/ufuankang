@@ -45,8 +45,8 @@ Vue.config.productionTip = false
 Vue.prototype.$fire = new Vue();
 Vue.prototype.$store = store;
 Vue.prototype.$api = {msg, json, prePage};
-Vue.prototype.$baseUrl = 'http://localhost:30221/jeecg-boot';
-//Vue.prototype.$baseUrl = 'https://youfuankang.com/jeecg-boot';
+//Vue.prototype.$baseUrl = 'http://localhost:30221/jeecg-boot';
+Vue.prototype.$baseUrl = 'https://youfuankang.com/jeecg-boot';
 
 App.mpType = 'app'
 
