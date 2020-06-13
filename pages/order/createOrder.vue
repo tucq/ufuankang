@@ -57,7 +57,7 @@
 				<text class="price-tip">¥</text>
 				<text class="price">{{totalPrice}}</text>
 			</view>
-			<text class="submit" @click="submit">提交订单</text>
+			<text class="submit" @click="submit">去付款</text>
 		</view>
 	</view>
 </template>
@@ -159,8 +159,11 @@
 			},
 			submit(){
 				uni.redirectTo({
-					url: '/pages/money/pay'
+					url: '/pages/request-payment/request-payment'
 				})
+				// uni.redirectTo({
+				// 	url: '/pages/money/pay'
+				// })
 			},
 		}
 	}
