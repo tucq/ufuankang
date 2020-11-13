@@ -89,15 +89,18 @@
 		data() {
 			return {
 				tabCurrentIndex: 0,
-				navList: [{
+				orderList: [],
+				orderListAll: [],
+				navList: [
+					{
 						state: 0,
-						text: '全部',
+						text: '待付款',
 						loadingType: 'more',
 						orderList: []
 					},
 					{
 						state: 1,
-						text: '待付款',
+						text: '待发货',
 						loadingType: 'more',
 						orderList: []
 					},
@@ -109,16 +112,11 @@
 					},
 					{
 						state: 3,
-						text: '待评价',
+						text: '已完成',
 						loadingType: 'more',
 						orderList: []
 					},
-					{
-						state: 4,
-						text: '售后',
-						loadingType: 'more',
-						orderList: []
-					}
+					
 				],
 			};
 		},
@@ -132,10 +130,11 @@
 			// #ifndef MP
 			this.loadData()
 			// #endif
+			
 			// #ifdef MP
-			if(options.state == 0){
-				this.loadData()
-			}
+			// if(options.state == 0){
+			// 	this.loadData()
+			// }
 			// #endif
 			
 		},

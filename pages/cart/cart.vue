@@ -84,7 +84,9 @@
 	import {
 		mapState
 	} from 'vuex';
+	
 	import uniNumberBox from '@/components/uni-number-box.vue'
+	
 	export default {
 		components: {
 			uniNumberBox
@@ -103,7 +105,6 @@
 			}
 		},
 		onLoad(){
-			
 		},
 		watch:{
 			//显示空白页
@@ -155,8 +156,6 @@
 						}
 					}
 				});
-				
-				
 			},
 			getAvatarView(imgUrl){
 				return this.$baseUrl + '/sys/common/view/' + imgUrl;
@@ -378,7 +377,7 @@
 				}
 				
 				uni.navigateTo({
-					url: `/pages/order/createOrder`
+					url: `/pages/order/createOrder?orderFlag=1`
 				})
 			}
 		}

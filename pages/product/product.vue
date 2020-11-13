@@ -308,7 +308,8 @@
 			// },
 			buy() {
 				uni.navigateTo({
-					url: `/pages/order/createOrder`
+					url: `/pages/order/createOrder?orderFlag=2&productId=`+this.productInfo.id+`&specs1Id=`+this.priceSelected.specs1Id
+					+`&specs2Id=`+this.priceSelected.specs2Id+`&buyNum=`+this.productInfo.quantity
 				})
 			},
 			stopPrevent() {}

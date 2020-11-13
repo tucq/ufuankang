@@ -38,15 +38,23 @@
 		<view class="yt-list">
 			<view class="yt-list-cell b-b">
 				<text class="cell-tit clamp">商品金额</text>
-				<text class="cell-tip price-color">¥{{totalPrice}}</text>
+				<text class="cell-tip price-color">¥{{totalAmount}}</text>
 			</view>
 			<view class="yt-list-cell b-b">
 				<text class="cell-tit clamp">运费</text>
-				<text class="cell-tip">免运费</text>
+				<text class="cell-tip">{{freightAmount === 0 ? '包邮' : freightAmount}}</text>
+			</view>
+			<view class="yt-list-cell b-b">
+				<text class="cell-tit clamp">活动优惠券</text>
+				<text class="cell-tip">{{eventAmount === 0 ? '无' : eventAmount}}</text>
+			</view>
+			<view class="yt-list-cell b-b">
+				<text class="cell-tit clamp">优惠券</text>
+				<text class="cell-tip">{{couponAmount === 0 ? '无' : couponAmount}}</text>
 			</view>
 			<view class="yt-list-cell desc-cell">
 				<text class="cell-tit clamp">备注</text>
-				<input class="desc" type="text" v-model="desc" placeholder="请填写备注信息" placeholder-class="placeholder" />
+				<input class="desc" type="text" v-model="remark" maxlength="255" placeholder="请填写备注信息" placeholder-class="placeholder" />
 			</view>
 		</view>
 		
@@ -55,9 +63,9 @@
 			<view class="price-content">
 				<text>实付款</text>
 				<text class="price-tip">¥</text>
-				<text class="price">{{totalPrice}}</text>
+				<text class="price">{{paymentAmount}}</text>
 			</view>
-			<text class="submit" @click="submit">去付款</text>
+			<text class="submit" @click="submit" :loading="loading">去付款</text>
 		</view>
 	</view>
 </template>
@@ -66,16 +74,31 @@
 	export default {
 		data() {
 			return {
-				maskState: 0, //优惠券面板显示状态
-				desc: '', //备注
-				payType: 1, //1微信 2支付宝
+				// payType: 1, //1微信 2支付宝
 				addressData: null,
 				cartList: [],
-				totalPrice: 0.00,
+				totalAmount: 0.00, //订单总金额
+				freightAmount:6, //运费
+				eventAmount:-12, //活动优惠券
+				couponAmount:-3, //优惠券
+				paymentAmount: 0.00, // 实付金额
+				remark: '', //备注
+				loading: false,
+				orderFlag: '',// 1购物车提交，2立即购买时的商品信息
+				payInfo: null,//立即购买时的商品信息
 			}
 		},
 		onLoad(option){
+			this.orderFlag = option.orderFlag;
 			this.loadAddress();
+			if(option.orderFlag === '2'){
+				this.payInfo = {
+					productId: option.productId,
+					specs1Id: option.specs1Id,
+					specs2Id: option.specs2Id,
+					buyNum: option.buyNum,
+				}
+			}
 			this.loadShoppingList();
 		},
 		methods: {
@@ -126,45 +149,168 @@
 					}
 				} catch (e) {}
 				this.cartList = [];
-				uni.request({
-					url: this.$baseUrl + '/shopping/car/list',
-					data: {
-						userId: userId,
-						isCheck: '0',
-						pageNo: 1,
-						pageSize: 10000,
-					},
-					header: {
-						'X-Access-Token': WX_TOKEN,
-					},
-					success: (res) => {
-						if (res.data.success) {
-							this.cartList = res.data.result.records;
-							let tp = 0.00;
-							this.cartList.forEach(item=>{
-								tp += item.price * item.buyNum;
-							});
-							this.totalPrice = Number(tp.toFixed(2));
-						}else{
-							//token 重新授权登录
-							uni.navigateTo({
-								url: '/pages/public/wxLogin'
-							})
+				if(this.orderFlag === '2'){//立即购买
+					uni.request({
+						url: this.$baseUrl + '/shopping/car/buyNow',
+						data: {
+							productId: this.payInfo.productId,
+							specs1Id: this.payInfo.specs1Id,
+							specs2Id: this.payInfo.specs2Id,
+							buyNum: this.payInfo.buyNum,
+						},
+						header: {
+							'X-Access-Token': WX_TOKEN,
+						},
+						success: (res) => {
+							if (res.data.success) {
+								this.cartList[0] = res.data.result;
+								let tp = 0.00;
+								this.cartList.forEach(item=>{
+									tp += item.price * this.payInfo.buyNum;
+								});
+								this.totalAmount = Number(tp.toFixed(2));
+								this.paymentAmount = this.totalAmount + this.freightAmount + this.eventAmount + this.couponAmount;
+							}else{
+								//token 重新授权登录
+								uni.navigateTo({
+									url: '/pages/public/wxLogin'
+								})
+							}
 						}
-					}
-				});
+					});
+				}else{
+					uni.request({
+						url: this.$baseUrl + '/shopping/car/list',
+						data: {
+							userId: userId,
+							isCheck: '0',
+							pageNo: 1,
+							pageSize: 10000,
+						},
+						header: {
+							'X-Access-Token': WX_TOKEN,
+						},
+						success: (res) => {
+							if (res.data.success) {
+								this.cartList = res.data.result.records;
+								let tp = 0.00;
+								this.cartList.forEach(item=>{
+									tp += item.price * item.buyNum;
+								});
+								this.totalAmount = Number(tp.toFixed(2));
+								this.paymentAmount = this.totalAmount + this.freightAmount + this.eventAmount + this.couponAmount;
+							}else{
+								//token 重新授权登录
+								uni.navigateTo({
+									url: '/pages/public/wxLogin'
+								})
+							}
+						}
+					});
+				}
+				
 			},
 			getAvatarView(imgUrl){
 				return this.$baseUrl + '/sys/common/view/' + imgUrl;
 			},
 			submit(){
-				uni.redirectTo({
-					url: '/pages/request-payment/request-payment'
+				this.loading = true;
+				let WX_TOKEN = '';
+				try {
+					const token = uni.getStorageSync('WX_TOKEN');
+					if (token) {
+						WX_TOKEN = token;
+					}
+				} catch (e) {}
+				uni.login({
+					success: (e) => {
+						let createTime = new Date().getTime();
+						uni.request({
+							url: this.$baseUrl + '/pay/wxPay',
+							data: {
+								username: this.addressData.username,
+								telephone: this.telephone,
+								address: this.addressData.address,
+								detailAddress: this.addressData.detailAddress,
+								totalAmount: this.totalAmount,
+								freightAmount: this.freightAmount,
+								eventAmount: this.eventAmount,
+								couponAmount: this.couponAmount,
+								remark: this.remark,
+								createTime: createTime,
+								payInfo: JSON.stringify(this.payInfo),
+							},
+							header: {
+								'X-Access-Token': WX_TOKEN,
+							},
+							success: (res) => {
+								this.loading = false;
+								if (res.statusCode !== 200) {
+									uni.showModal({
+										content: "支付失败，请重试！",
+										showCancel: false
+									});
+									return;
+								}
+								if (res.data.success) {
+									let paymentData = res.data.result;
+									uni.requestPayment({
+										timeStamp: paymentData.timeStamp,
+										nonceStr: paymentData.nonceStr,
+										package: paymentData.package,
+										signType: paymentData.signType,
+										paySign: paymentData.paySign,
+										success: (res) => {
+											this.payforCallback("success");
+										},
+										fail: (res) => {
+											console.log(22222222,createTime);
+											this.payforCallback("fail",createTime);
+										},
+										complete: () => {
+											this.loading = false;
+										}
+									})
+								} else {
+									uni.showModal({
+										content: res.data.message,
+										showCancel: false
+									})
+								}
+							},
+							fail: (e) => {
+								console.log("fail-1", e);
+								this.loading = false;
+								uni.showModal({
+									content: "支付失败,原因为: " + e.errMsg,
+									showCancel: false
+								})
+							}
+						})
+					},
+					fail: (e) => {
+						console.log("fail-2", e);
+						this.loading = false;
+						uni.showModal({
+							content: "支付失败,原因为: " + e.errMsg,
+							showCancel: false
+						})
+					}
 				})
-				// uni.redirectTo({
-				// 	url: '/pages/money/pay'
-				// })
 			},
+			payforCallback(falg,createTime){
+				if(falg == "success"){
+					uni.showToast({
+						title: "感谢您的测试!"
+					})
+				}else{
+					uni.redirectTo({
+						url: '/pages/money/payFail?createTime='+createTime
+					})
+				}
+			},
+			
+			
 		}
 	}
 </script>
