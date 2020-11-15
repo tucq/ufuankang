@@ -229,7 +229,7 @@
 							url: this.$baseUrl + '/pay/wxPay',
 							data: {
 								username: this.addressData.username,
-								telephone: this.telephone,
+								telephone: this.addressData.telephone,
 								address: this.addressData.address,
 								detailAddress: this.addressData.detailAddress,
 								totalAmount: this.totalAmount,
@@ -261,11 +261,10 @@
 										signType: paymentData.signType,
 										paySign: paymentData.paySign,
 										success: (res) => {
-											this.payforCallback("success");
+											this.payforCallback("success",paymentData);
 										},
 										fail: (res) => {
-											console.log(22222222,createTime);
-											this.payforCallback("fail",createTime);
+											this.payforCallback("fail",paymentData);
 										},
 										complete: () => {
 											this.loading = false;
@@ -298,15 +297,46 @@
 					}
 				})
 			},
-			payforCallback(falg,createTime){
+			payforCallback(falg,paymentData){
 				if(falg == "success"){
-					uni.showToast({
-						title: "感谢您的测试!"
+					uni.redirectTo({
+						url: '/pages/order/paySuccess?orderId='+paymentData.orderId
 					})
 				}else{
-					uni.redirectTo({
-						url: '/pages/money/payFail?createTime='+createTime
+					//未付款处理
+					this.loading = true;
+					let WX_TOKEN = '';
+					try {
+						const token = uni.getStorageSync('WX_TOKEN');
+						if (token) {
+							WX_TOKEN = token;
+						}
+					} catch (e) {}
+					uni.request({
+						url: this.$baseUrl + '/orderUnpaid/add',
+						data: {
+							orderId: paymentData.orderId,
+							timeStamp: paymentData.timeStamp,
+							nonceStr: paymentData.nonceStr,
+							packageStr: paymentData.package,
+							signType: paymentData.signType,
+							paySign: paymentData.paySign,
+						},
+						method: 'POST',
+						header: {
+							'X-Access-Token': WX_TOKEN,
+						},
+						success: (res) => {
+							console.log("res.data.success",JSON.stringify(res));
+							if (res.data.success) {
+								uni.redirectTo({
+									url: '/pages/order/payFail?createTime='+paymentData.createTime+'&orderId='+paymentData.orderId
+								})
+							}
+						},
 					})
+					
+					
 				}
 			},
 			

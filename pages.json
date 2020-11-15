@@ -55,7 +55,6 @@
 				"navigationBarTitleText": "设置"
 			}
 		},
-
 		{
 			"path": "pages/userinfo/userinfo",
 			"style": {
@@ -128,6 +127,16 @@
 				}
 			}
 		}, {
+			"path": "pages/order/createOrder",
+			"style": {
+				"navigationBarTitleText": "提交订单"
+			}
+		},{
+			"path": "pages/order/orderDetail",
+			"style": {
+				"navigationBarTitleText": "订单详情"
+			}
+		}, {
 			"path": "pages/order/order",
 			"style": {
 				"navigationBarTitleText": "我的订单",
@@ -136,12 +145,15 @@
 				}
 			}
 		}, {
-			"path": "pages/money/money",
-			"style": {}
-		}, {
-			"path": "pages/order/createOrder",
+			"path": "pages/order/paySuccess",
 			"style": {
-				"navigationBarTitleText": "提交订单"
+				"navigationBarTitleText": "支付成功"
+			}
+		},
+		{
+			"path": "pages/order/payFail",
+			"style": {
+				"navigationBarTitleText": "支付失败"
 			}
 		}, {
 			"path": "pages/address/address",
@@ -153,55 +165,37 @@
 			"style": {
 				"navigationBarTitleText": ""
 			}
-		}, {
-			"path": "pages/money/pay",
-			"style": {
-				"navigationBarTitleText": "支付"
-			}
 		},
 		{
-			"path": "pages/money/paySuccess",
+			"path": "pages/notice/notice",
 			"style": {
-				"navigationBarTitleText": "支付成功"
-			}
-		},
-		{
-			"path": "pages/money/payFail",
-			"style": {
-				"navigationBarTitleText": "支付结果"
-			}
-		},{
-            "path" : "pages/notice/notice",
-            "style" : {
 				"navigationBarTitleText": "通知"
 			}
-        }
-        ,{
-            "path" : "pages/category/category",
-            "style" : {
+		}, {
+			"path": "pages/category/category",
+			"style": {
 				"navigationBarTitleText": "分类",
 				"app-plus": {
 					"bounce": "none"
 				}
 			}
-        }
-        ,{
-            "path" : "pages/product/list",
-            "style" : {
+		}, {
+			"path": "pages/product/list",
+			"style": {
 				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "商品列表"
 			}
-        },{
-            "path" : "pages/ads/list",
-            "style" : {
+		}, {
+			"path": "pages/ads/list",
+			"style": {
 				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "商品列表"
 			}
-        }, {
+		}, {
 			"path": "pages/request-payment/request-payment",
 			"style": {}
 		}
-    ],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
